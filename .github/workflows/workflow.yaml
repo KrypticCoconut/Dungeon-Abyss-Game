@@ -1,0 +1,14 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Code Lines Badge
+      uses: Kherrisan/cloc-badge-action@1.0.1
