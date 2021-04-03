@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MoveForward : MonoBehaviour
 {
+    GameObject EZ;
     GameObject thePlayer;
     List<GunInfo> GunsList;
     GunInfo EquippedGun;
