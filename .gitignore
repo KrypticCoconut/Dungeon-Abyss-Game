@@ -1,3 +1,4 @@
 *.meta
 *.cs.meta
 MainMenu/*.meta
+cloc-1.88.exe

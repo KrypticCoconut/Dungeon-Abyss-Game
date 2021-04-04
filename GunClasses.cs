@@ -18,11 +18,11 @@ public class GunClasses : MonoBehaviour
             oneinstance = this;
             GunInfo pistol = new GunInfo("pistol",0, 40, 1, 20, 1, 10, 1, single_shot_effect, bullet, false, 0);
             GunInfo doublepistol = new GunInfo("doublepistol",0, 40, 1, 20, 2, 10, 1, single_shot_effect, bullet, false, 0);
-            GunInfo revolver = new GunInfo("revolver",5, 70, 1, 80, 1, 40, 1, single_shot_effect, bullet, false, 0);
-            GunInfo rifle = new GunInfo("rifle",0, 60, .2f, 30, 1, 30, 1.5f, single_shot_effect, bullet, true, 0);
-            GunInfo machinegun = new GunInfo("machinegun",10, 40, .07f, 35, 1, 15, .5f, single_shot_effect, bullet, true, 0);
-            GunInfo sniper = new GunInfo("sniper",0, 200, 1.5f, 500, 1, 80, 3f, single_shot_effect, bullet, false, 500);
-            GunInfo shotgun = new GunInfo("shotgun",0, 60, .7f, 60, 7, 40, 1.5f, single_shot_effect, bullet, false, 0);
+            // GunInfo revolver = new GunInfo("revolver",5, 70, 1, 80, 1, 40, 1, single_shot_effect, bullet, false, 0);
+            // GunInfo rifle = new GunInfo("rifle",0, 60, .2f, 30, 1, 30, 1.5f, single_shot_effect, bullet, true, 0);
+            // GunInfo machinegun = new GunInfo("machinegun",10, 40, .07f, 35, 1, 15, .5f, single_shot_effect, bullet, true, 0);
+            // GunInfo sniper = new GunInfo("sniper",0, 200, 1.5f, 500, 1, 80, 3f, single_shot_effect, bullet, false, 500);
+            // GunInfo shotgun = new GunInfo("shotgun",0, 60, .7f, 60, 7, 40, 1.5f, single_shot_effect, bullet, false, 0);
         }
         else{
             Destroy(gameObject);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using System.Linq;
 
 public class ContinueClick : MonoBehaviour
 {
@@ -37,7 +37,7 @@ public class ContinueClick : MonoBehaviour
 		if(controller.index == thisIndex)
 		{   
             animator.SetBool ("selected", true);
-            if(Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Return)  && runfunc != true){
+            if(Input.GetButtonDown("Submit")  && runfunc != true){
                 animator.SetBool ("pressed", true);
                 controller.reservesoundtime = false;
 
@@ -53,7 +53,6 @@ public class ContinueClick : MonoBehaviour
         if(runfunc){
 
             GameData data = SaveSystem.LoadSave();
-            print(data.data.health + " " + data.dungeon);
             
             if(data.dungeon == null){
                 canvas.GetComponent<MenuButtonController>().enabled = false;
@@ -87,7 +86,7 @@ public class ContinueClick : MonoBehaviour
         runfunc = true;
         invoked = false;
     }
-    public IEnumerator
+
 
     
 }
