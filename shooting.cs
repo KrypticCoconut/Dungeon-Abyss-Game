@@ -26,20 +26,32 @@ public class shooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+    void ReadyToShoot()
+    {
+        readytoshoot = true;
+    }
+    public bool Chance(float chance)
+    {
+        int random = UnityEngine.Random.Range(1, 100);
+        if (random <= chance)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    void DefaultReload(){
         if (EquippedGun.AllowButtonHold && Input.GetMouseButton(0) && readytoshoot)
         {
             readytoshoot = false;
-            DefaultShoot();
-            Invoke("readytoshoot", EquippedGun.FireRate);
         }
         else if(Input.GetMouseButtonDown(0) && readytoshoot && !EquippedGun.AllowButtonHold)
         {
-            print(readytoshoot);
             readytoshoot = false;
-            print("switched" + ": " + readytoshoot);
             DefaultShoot();
-            Invoke("ReadyToShoot", EquippedGun.FireRate);
-            print("ending2: " + readytoshoot);  
         }
     }
 
@@ -80,19 +92,12 @@ public class shooting : MonoBehaviour
                 spreadvar = UnityEngine.Random.Range(-EquippedGun.BulletSpread, EquippedGun.BulletSpread);
             }
             bullet = Instantiate(EquippedGun.bullet, new Vector3(transform.position.x, transform.position.y, -9), transform.rotation * Quaternion.Euler(0, 0, spreadvar));
-            print("intantiated: " + readytoshoot);
             StartCoroutine(DefaultBulletModifier(bullet, EquippedGun));
         }
 
         thePlayer.transform.Translate(new Vector2(0, -EquippedGun.recoil * Time.deltaTime));
-        print("ending: " + readytoshoot);
     }
 
-    void ReadyToShoot()
-    {
-        print("switched again");
-        readytoshoot = true;
-    }
 
     public IEnumerator DefaultBulletModifier(GameObject bullet, GunInfo shotby){
         bool hit = bullet.GetComponent<MoveForward>().hit;
@@ -128,16 +133,8 @@ public class shooting : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public bool Chance(float chance)
-    {
-        int random = UnityEngine.Random.Range(1, 100);
-        if (random <= chance)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+
+
+
+
 }
