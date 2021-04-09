@@ -486,6 +486,7 @@ public class MyOwnBoard : MonoBehaviour
         CreateCorr(dungeon);
         CreateObstacle(dungeon);
 
+        
         GameData currentdata = SaveSystem.LoadSave();
         currentdata.dungeon = dungeon;
         SaveSystem.SaveAll(currentdata.dungeon, currentdata.data);

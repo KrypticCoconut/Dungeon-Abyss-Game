@@ -10,8 +10,11 @@ public class MoveForward : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D enemy)
     {
-        hit = true;
-        enemyhit = enemy;
+        if(enemy.tag != "Player"){
+            print("hit: " + enemy.gameObject.name);
+            hit = true;
+            enemyhit = enemy;
+        }
     }
     public void Update() {
         if(enableraycast){

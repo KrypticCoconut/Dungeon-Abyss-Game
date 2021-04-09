@@ -16,13 +16,13 @@ public class GunClasses : MonoBehaviour
     {
         if(oneinstance == null){
             oneinstance = this;
-            GunInfo pistol = new GunInfo("pistol",0, 40, 1, 20, 1, 10, 1, single_shot_effect, bullet, false, 0);
-            GunInfo doublepistol = new GunInfo("doublepistol",0, 40, 1, 20, 2, 10, 1, single_shot_effect, bullet, false, 0);
-            GunInfo revolver = new GunInfo("revolver",5, 70, 1, 80, 1, 40, 1, single_shot_effect, bullet, false, 0);
-            GunInfo rifle = new GunInfo("rifle",0, 60, .2f, 30, 1, 30, 1.5f, single_shot_effect, bullet, true, 0);
-            GunInfo machinegun = new GunInfo("machinegun",10, 40, .07f, 35, 1, 15, .5f, single_shot_effect, bullet, true, 0);
-            GunInfo sniper = new GunInfo("sniper",0, 200, 1.5f, 500, 1, 80, 3f, single_shot_effect, bullet, false, 500);
-            GunInfo shotgun = new GunInfo("shotgun",0, 60, .7f, 60, 7, 40, 1.5f, single_shot_effect, bullet, false, 0);
+            // GunInfo pistol = new GunInfo("pistol",0, 40, 1, 20, 1, 10, 1, single_shot_effect, bullet, false, 0);
+            // GunInfo doublepistol = new GunInfo("doublepistol",0, 40, 1, 20, 2, 10, 1, single_shot_effect, bullet, false, 0);
+            // GunInfo revolver = new GunInfo("revolver",5, 70, 1, 80, 1, 40, 1, single_shot_effect, bullet, false, 0);
+            // GunInfo rifle = new GunInfo("rifle",0, 60, .2f, 30, 1, 30, 1.5f, single_shot_effect, bullet, true, 0);
+            // GunInfo machinegun = new GunInfo("machinegun",10, 40, .07f, 35, 1, 15, .5f, single_shot_effect, bullet, true, 0);
+            // GunInfo sniper = new GunInfo("sniper",0, 200, 1.5f, 500, 1, 80, 3f, single_shot_effect, bullet, false, 500);
+            // GunInfo shotgun = new GunInfo("shotgun",0, 60, .7f, 60, 7, 40, 1.5f, single_shot_effect, bullet, false, 0);
         }
         else{
             Destroy(gameObject);
@@ -44,25 +44,25 @@ public class guns : MonoBehaviour
     // Start is called before the first frame update
     public void Awake()
     {
-        equipped = 1;
-        GunList = new List<GunInfo>();
 
-        GunInfo pistol = new GunInfo("pistol",0, 40, 1, 20, 1, 10, 1, single_shot_effect, bullet, false, 0);
-        GunInfo.Guns.Add(name, pistol);
-        GunInfo doublepistol = new GunInfo("doublepistol",0, 40, 1, 20, 2, 10, 1, single_shot_effect, bullet, false, 0);
-        GunInfo revolver = new GunInfo("revolver",5, 70, 1, 80, 1, 40, 1, single_shot_effect, bullet, false, 0);
-        GunInfo rifle = new GunInfo("rifle",0, 60, .2f, 30, 1, 30, 1.5f, single_shot_effect, bullet, true, 0);
-        GunInfo machinegun = new GunInfo("machinegun",10, 40, .07f, 35, 1, 15, .5f, single_shot_effect, bullet, true, 0);
-        GunInfo sniper = new GunInfo("sniper",0, 200, 1.5f, 500, 1, 80, 3f, single_shot_effect, bullet, false, 500);
-        GunInfo shotgun = new GunInfo("shotgun",0, 60, .7f, 60, 7, 40, 1.5f, single_shot_effect, bullet, false, 0);
+
+        // GunInfo pistol = new GunInfo("pistol",0, 40, 1, 20, 1, 10, 1, single_shot_effect, bullet, false, 0);
+        // GunInfo.Guns.Add(name, pistol);
+        //GunInfo doublepistol = new GunInfo("doublepistol",0, 40, 1, 20, 2, 10, 1, single_shot_effect, bullet, false, 0);
+        // GunInfo revolver = new GunInfo("revolver",5, 70, 1, 80, 1, 40, 1, single_shot_effect, bullet, false, 0);
+        // GunInfo rifle = new GunInfo("rifle",0, 60, .2f, 30, 1, 30, 1.5f, single_shot_effect, bullet, true, 0);
+        // GunInfo machinegun = new GunInfo("machinegun",10, 40, .07f, 35, 1, 15, .5f, single_shot_effect, bullet, true, 0);
+        // GunInfo sniper = new GunInfo("sniper",0, 200, 1.5f, 500, 1, 80, 3f, single_shot_effect, bullet, false, 500);
+        // GunInfo shotgun = new GunInfo("shotgun",0, 60, .7f, 60, 7, 40, 1.5f, single_shot_effect, bullet, false, 0);
     }
 }
 public class GunInfo
 {
+    public delegate void Shootfunc(); 
+    public Shootfunc shootfunc;
     public string name;
     public static IDictionary<string, GunInfo> Guns = new Dictionary<string, GunInfo>();
 
-    public static List<GunInfo> allguns = new List<GunInfo>();
     public float BulletSpread;
     public float BulletSpeed;
     public float FireRate;
@@ -75,8 +75,9 @@ public class GunInfo
     public GameObject bullet;
     public bool AllowButtonHold;
 
-    public GunInfo(string name, float BulletSpread, float BulletSpeed, float FireRate, float Damage, float multishot, float CC, float CD, GameObject HitEffect, GameObject bullet, bool AllowButtonHold, float recoil)
+    public GunInfo(string name, float BulletSpread, float BulletSpeed, float FireRate, float Damage, float multishot, float CC, float CD, GameObject HitEffect, GameObject bullet, bool AllowButtonHold, float recoil, Shootfunc function)
     {
+        this.shootfunc = function;
         this.name = name;
         this.BulletSpread = BulletSpread;
         this.BulletSpeed = BulletSpeed;
@@ -89,8 +90,7 @@ public class GunInfo
         this.bullet = bullet;
         this.AllowButtonHold = AllowButtonHold;
         this.recoil = recoil;
-        Guns.Add(name, this);
-        allguns.Add(this);
+
     }
 }
 

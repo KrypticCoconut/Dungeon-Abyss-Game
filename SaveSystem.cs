@@ -50,12 +50,9 @@ public static class SaveSystem{
             SaveDataAll data =  formatter.Deserialize(stream) as SaveDataAll;
 
             if(data.playerData == null){
-                SaveDataAll temp = new SaveDataAll();
                 PlayerData playerdata = new PlayerData();
                 playerdata.createdefaultsetting();
-                temp.playerData = new SaveDataPlayerData(playerdata);
-                data.playerData = temp.playerData;
-                temp.dungeon = data.dungeon;
+                data.playerData = new SaveDataPlayerData(playerdata);
                 formatter.Serialize(stream, data);
             }
             if(data.dungeon == null){
@@ -94,12 +91,14 @@ public static class SaveSystem{
         PlayerData playerdata = new PlayerData();
         playerdata.armor = data.armor;
         playerdata.health = data.health;
-        foreach(int gunindex in data.owned){
-            playerdata.owned.Add(GunInfo.allguns[gunindex]);
+        GunInfo temp;
+        foreach(string gun in data.owned){
+            GunInfo.Guns.TryGetValue(gun, out temp);
+            playerdata.owned.Add(temp);
         }
-        foreach(int equippedindex in data.equipped){
-            
-            playerdata.equipped.Add(playerdata.owned[equippedindex]);
+        foreach(string gun in data.equipped){
+            GunInfo.Guns.TryGetValue(gun, out temp);
+            playerdata.equipped.Add(temp);
         }
         return playerdata;
     }

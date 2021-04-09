@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
-
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 public class shooting : MonoBehaviour
 {
     // Start is called before the first frame update
     GameObject thePlayer;
+    public PlayerData temp;
     public GunInfo EquippedGun;
     bool readytoshoot = true;
     float spreadvar;
@@ -15,17 +17,42 @@ public class shooting : MonoBehaviour
     bool even;
     public GameObject bullet;
     float multishotangle;
+    GameData currentdata;
     void Start()
     {
-        print("hi");
-        GameData currentdata = SaveSystem.LoadSave();
-        thePlayer = GameObject.Find("Player");
-        EquippedGun = currentdata.data.equipped[0];
+        print("started");
+        // currentdata = SaveSystem.LoadSave();
+        // thePlayer = GameObject.Find("Player");
+        // EquippedGun = currentdata.data.equipped[0];
+
+        // string path = Application.persistentDataPath + "/player.save";
+        // BinaryFormatter formatter = new BinaryFormatter();
+        // FileStream stream = new FileStream(path, FileMode.Open);
+        // SaveDataPlayerData data =  (formatter.Deserialize(stream) as SaveDataAll).playerData;
+        // foreach(string gun in data.equipped){
+        //     print(gun);
+        // }
+
+
+        PlayerData newplayerdata = new PlayerData();
+        newplayerdata.createdefaultsetting();
+        foreach(GunInfo gun in newplayerdata.owned){
+            print(gun.name);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        // if(Input.GetKeyDown(KeyCode.Alpha1)){
+        //     EquippedGun = currentdata.data.equipped[0];
+        //     print("primary: " + currentdata.data.equipped[0].name);
+        // }
+        // if(Input.GetKeyDown(KeyCode.Alpha2)){
+        //     EquippedGun = currentdata.data.equipped[1];
+        //     print("secondary: " + currentdata.data.equipped[1].name);
+        // }
+        // EquippedGun.shootfunc();
     }
     void ReadyToShoot()
     {
@@ -57,7 +84,7 @@ public class shooting : MonoBehaviour
 
     void DefaultShoot()
     {
-        multishotcount = Enumerable.Range(1, (int)EquippedGun.multishot+1);
+        multishotcount = Enumerable.Range(1, (int)EquippedGun.multishot);
         if (EquippedGun.multishot != 1)
         {
             if (EquippedGun.multishot % 2 == 0)
@@ -82,6 +109,7 @@ public class shooting : MonoBehaviour
                 if (multishotangle == 0 && even == false)
                 {
                     multishotangle += 10;
+                    print("trye");
                 }
             }
         }

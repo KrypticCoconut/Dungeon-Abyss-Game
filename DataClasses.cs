@@ -78,23 +78,16 @@ public class SaveDataDungeon{
 public class SaveDataPlayerData{
     public int health;
     public int armor;
-    public List<int> owned = new List<int>();
-    public List<int> equipped = new List<int>(new int[2]);
+    public List<string> owned = new List<string>();
+    public List<string> equipped = new List<string>(new string[2]);
     public SaveDataPlayerData(PlayerData data){
         this.health = data.health;
         this.armor = data.armor;
-        foreach((GunInfo gun, int index) in GunInfo.allguns.Select((value, i) => (value, i))){
-            foreach((GunInfo ownedgun, int ownedindex) in data.owned.Select((value, i) => (value, i))){
-                if(ownedgun == gun){
-                    owned.Add(index);
-                    if(data.equipped[0] == ownedgun){
-                        equipped[0] = ownedindex;
-                    }
-                    if(data.equipped[1] == ownedgun){
-                        equipped[1] = ownedindex;
-                    }
-                }
-            }
+        foreach(GunInfo gun in data.owned){
+            owned.Add(gun.name);
+        }
+        foreach(GunInfo gun in data.equipped){
+            equipped.Add(gun.name);
         }
     }
 }
@@ -149,17 +142,17 @@ public class GameData{
 public class PlayerData{
     public List<GunInfo> owned = new List<GunInfo>();  
     public List<GunInfo> equipped = new List<GunInfo>();
-
+    public static List<string> startingguns = new List<string>() {"pistol", "doublepistol"};
     public int health;
     public int armor;
 
     public void createdefaultsetting(){
         armor = 0;
         health = 300;
-        List<string> startingguns = new List<string>() {"pistol", "doublepistol"};
         foreach(string gun in startingguns){
             GunInfo temp;
-            GunInfo.Guns.TryGetValue("pistol", out temp);
+            GunInfo.Guns.TryGetValue(gun, out temp);
+
             owned.Add(temp);
             equipped.Add(temp);
         }

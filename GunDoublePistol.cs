@@ -1,47 +1,60 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class GunPistol : MonoBehaviour
+using System.Linq;
+public class GunDoublePistol : MonoBehaviour
 {
-
+    Transform[] enemies;
     GameObject thePlayer;
     public GunInfo EquippedGun;
     bool readytoshoot = true;
     float spreadvar;
     IEnumerable<int> multishotcount;
-    public float damagedone;
     bool even;
-    public int shotnumber;
     public GameObject bullet;
+    float multishotangle;
+
     // Start is called before the first frame update
     void Awake()
     {
         thePlayer = GameObject.Find("Player");
-        GunInfo pistol = new GunInfo("pistol",0, 40, 1, 20, 1, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, PistolReload);
-        EquippedGun = pistol;
-        GunInfo.Guns.Add(pistol.name, pistol);
+        GunInfo doublepistol = new GunInfo("doublepistol",0, 40, 1, 20, 2, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, DoublePistolReload);
+        EquippedGun = doublepistol;
+        GunInfo.Guns.Add(doublepistol.name, doublepistol);
     }
 
     // Update is called once per frame
-    public void PistolReload(){
+    public void DoublePistolReload(){
         if(Input.GetMouseButtonDown(0) && readytoshoot)
         {
             readytoshoot = false;
-            PistolShoot();
+            DoublePistolShoot();
             Invoke("reload", EquippedGun.FireRate);
         }
     }
-    public void PistolShoot()
+    public void DoublePistolShoot()
     {
-        shotnumber++;
-        bullet = Instantiate(EquippedGun.bullet, new Vector3(thePlayer.transform.position.x, thePlayer.transform.position.y, -9), thePlayer.transform.rotation * Quaternion.Euler(0, 0, spreadvar));
-        StartCoroutine(PistolBulletModifier(bullet, EquippedGun));
-        thePlayer.transform.Translate(new Vector2(0, -EquippedGun.recoil * Time.deltaTime));
+        if (EquippedGun.multishot % 2 == 0)
+        {
+            even = true;
+            multishotangle = ((EquippedGun.multishot-1)/2) *-10;
+        }
+        else
+        {
+            even = false;
+            multishotangle = (EquippedGun.multishot/2) * -10;
+        }
+        multishotcount = Enumerable.Range(1, (int)EquippedGun.multishot);
+        foreach (int i in multishotcount)
+        {
+            bullet = Instantiate(EquippedGun.bullet, new Vector3(thePlayer.transform.position.x, thePlayer.transform.position.y, -9 ), thePlayer.transform.rotation * Quaternion.Euler(0, 0, multishotangle));
+            StartCoroutine(DoublePistolBulletModifier(bullet, EquippedGun));
+            multishotangle += 10;
+        }
     }
 
 
-    public IEnumerator PistolBulletModifier(GameObject bullet, GunInfo shotby){
+    public IEnumerator DoublePistolBulletModifier(GameObject bullet, GunInfo shotby){
         if( shotby.BulletSpeed > 140){
             bullet.GetComponent<MoveForward>().enableraycast = true;
         }
@@ -61,13 +74,6 @@ public class GunPistol : MonoBehaviour
             else
             {
                 damage = EquippedGun.Damage;
-            }
-            if(shotnumber == 4){
-                damage = damagedone*2 + damage;
-                shotnumber = 0;
-            }
-            else{
-                damagedone += damage;
             }
             enemy.GetComponent<enemyhealth>().health -= damage;
             if (enemy.GetComponent<enemyhealth>().health <= 0)
@@ -96,5 +102,16 @@ public class GunPistol : MonoBehaviour
     }
     public void reload(){
         readytoshoot = true;
+    }
+    public Vector3 GetClosestEnemy(Transform[] enemies){
+        Vector3 closest = enemies[0].transform.position;
+        foreach(Transform enemy in enemies){
+            Vector3 vector = enemy.position;
+            float distance = Vector3.Distance(vector, thePlayer.transform.position);
+            if(Vector3.Distance(closest, thePlayer.transform.position) > distance ){
+                closest = enemy.position;
+            }
+        }
+        return closest;
     }
 }
