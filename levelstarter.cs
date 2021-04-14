@@ -17,7 +17,7 @@ public class levelstarter : MonoBehaviour
     void Start()
     {
         dungeon = livegamedata.currentlevel;
-        print(dungeon.room);
+    
         startlevel();
     }
 

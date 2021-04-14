@@ -47,11 +47,6 @@ public class BoardStarter : MonoBehaviour
 
         cam.transform.position = new Vector3(dungeon.roomspace.center.x, dungeon.roomspace.center.y, cam.transform.position.z);
         cam.GetComponent<butparent>().UpdateZoom(dungeon.roomspace.height/2);
-
-        GameData currentdata = SaveSystem.LoadSave();
-        currentdata.dungeon = dungeon;
-        currentdata.data.health++;
-        SaveSystem.SaveAll(currentdata.dungeon, currentdata.data);
     }
 
 

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+
 
 [System.Serializable]
 public class SaveDataDungeon{
@@ -79,15 +82,18 @@ public class SaveDataPlayerData{
     public int health;
     public int armor;
     public List<string> owned = new List<string>();
-    public List<string> equipped = new List<string>(new string[2]);
+    public List<string> equipped = new List<string>();
     public SaveDataPlayerData(PlayerData data){
         this.health = data.health;
         this.armor = data.armor;
         foreach(GunInfo gun in data.owned){
             owned.Add(gun.name);
         }
-        foreach(GunInfo gun in data.equipped){
-            equipped.Add(gun.name);
+        foreach(GunInfo gun2 in data.equipped){
+            string path = Application.persistentDataPath + "/" + gun2.name;
+            FileStream stream = new FileStream(path, FileMode.Create);
+            stream.Close();
+            equipped.Add(gun2.name);
         }
     }
 }
