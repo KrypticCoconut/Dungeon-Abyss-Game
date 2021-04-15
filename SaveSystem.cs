@@ -99,6 +99,9 @@ public static class SaveSystem{
         foreach(string gun in data.equipped){
             GunInfo.Guns.TryGetValue(gun, out temp);
             playerdata.equipped.Add(temp);
+            string path = Application.persistentDataPath + "/" + temp;
+            FileStream stream = new FileStream(path, FileMode.Create);
+            stream.Close();
         }
         return playerdata;
     }
