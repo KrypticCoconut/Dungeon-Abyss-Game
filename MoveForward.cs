@@ -11,14 +11,18 @@ public class MoveForward : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D enemy)
     {
         if(enemy.tag != "Player"){
-            print("hit: " + enemy.gameObject.name);
             hit = true;
             enemyhit = enemy;
         }
     }
     public void Update() {
+        RaycastHit2D raycast;
         if(enableraycast){
-            hit = Physics2D.Raycast(transform.position, transform.TransformDirection(Vector2.down), 12f);
+            raycast = Physics2D.Raycast(transform.position, transform.TransformDirection(Vector2.down), 12f);
+            if(raycast.collider != null && raycast.collider.gameObject.name != "Player"){
+                hit = true;
+                enemyhit = raycast.collider;
+            }
         }
     }
 

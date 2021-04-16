@@ -14,8 +14,7 @@ public class testscript : MonoBehaviour
     }
 
     // Update is called once per frame
-    GameData func1()
-    {
-        return new GameData(null, new PlayerData());
+    private void Update() {
+        transform.Translate(new Vector2(0,.05f));
     }
 }

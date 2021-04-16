@@ -20,10 +20,6 @@ public class shooting : MonoBehaviour
     GameData currentdata;
     void Start()
     {
-        print("started");
-        GunInfo gun;
-        GunInfo.Guns.TryGetValue("pistol", out gun);
-        print(gun.name);
         currentdata = SaveSystem.LoadSave();
         thePlayer = GameObject.Find("Player");
         EquippedGun = currentdata.data.equipped[0];
@@ -34,6 +30,7 @@ public class shooting : MonoBehaviour
         // foreach(string gun in data.equipped){
         //     print(gun);
         // }
+        print(transform.InverseTransformPoint(transform.position) + ", " + transform.position);
 
     }
 
@@ -42,11 +39,9 @@ public class shooting : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Alpha1)){
             EquippedGun = currentdata.data.equipped[0];
-            print("primary: " + currentdata.data.equipped[0].name);
         }
         if(Input.GetKeyDown(KeyCode.Alpha2)){
             EquippedGun = currentdata.data.equipped[1];
-            print("secondary: " + currentdata.data.equipped[1].name);
         }
         EquippedGun.shootfunc();
     }
