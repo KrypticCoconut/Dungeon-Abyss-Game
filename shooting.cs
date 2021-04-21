@@ -17,19 +17,12 @@ public class shooting : MonoBehaviour
     bool even;
     public GameObject bullet;
     float multishotangle;
-    GameData currentdata;
+    PlayerData currentdata;
     void Start()
     {
-        currentdata = SaveSystem.LoadSave();
         thePlayer = GameObject.Find("Player");
-        EquippedGun = currentdata.data.equipped[0];
-        // string path = Application.persistentDataPath + "/player.save";
-        // BinaryFormatter formatter = new BinaryFormatter();
-        // FileStream stream = new FileStream(path, FileMode.Open);
-        // SaveDataPlayerData data =  (formatter.Deserialize(stream) as SaveDataAll).playerData;
-        // foreach(string gun in data.equipped){
-        //     print(gun);
-        // }
+        currentdata = livegamedata.currentdata;
+        EquippedGun = currentdata.equipped[0];
         print(transform.InverseTransformPoint(transform.position) + ", " + transform.position);
 
     }
@@ -38,12 +31,15 @@ public class shooting : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Alpha1)){
-            EquippedGun = currentdata.data.equipped[0];
+            EquippedGun = currentdata.equipped[0];
         }
         if(Input.GetKeyDown(KeyCode.Alpha2)){
-            EquippedGun = currentdata.data.equipped[1];
+            EquippedGun = currentdata.equipped[1];
         }
-        EquippedGun.shootfunc();
+        if(EquippedGun.level >= 10){
+            
+        }
+        EquippedGun.shootfunc(thePlayer);
     }
     void ReadyToShoot()
     {

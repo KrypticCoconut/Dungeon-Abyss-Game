@@ -58,7 +58,7 @@ public class guns : MonoBehaviour
 }
 public class GunInfo
 {
-    public delegate void Shootfunc(); 
+    public delegate void Shootfunc(GameObject theplayer); 
     public Shootfunc shootfunc;
     public string name;
     public static IDictionary<string, GunInfo> Guns = new Dictionary<string, GunInfo>();
@@ -75,6 +75,7 @@ public class GunInfo
     public GameObject bullet;
     public bool AllowButtonHold;
 
+    public int level;
     public GunInfo(string name, float BulletSpread, float BulletSpeed, float FireRate, float Damage, float multishot, float CC, float CD, GameObject HitEffect, GameObject bullet, bool AllowButtonHold, float recoil, Shootfunc function)
     {
         this.shootfunc = function;
@@ -90,6 +91,7 @@ public class GunInfo
         this.bullet = bullet;
         this.AllowButtonHold = AllowButtonHold;
         this.recoil = recoil;
+        this.level = 1;
 
     }
 }

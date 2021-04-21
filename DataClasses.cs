@@ -81,19 +81,16 @@ public class SaveDataDungeon{
 public class SaveDataPlayerData{
     public int health;
     public int armor;
-    public List<string> owned = new List<string>();
-    public List<string> equipped = new List<string>();
+    public List<gun> owned = new List<gun>();
+    public List<gun> equipped = new List<gun>();
     public SaveDataPlayerData(PlayerData data){
         this.health = data.health;
         this.armor = data.armor;
         foreach(GunInfo gun in data.owned){
-            owned.Add(gun.name);
+            owned.Add(new gun(gun.level, gun.name));
         }
         foreach(GunInfo gun2 in data.equipped){
-            string path = Application.persistentDataPath + "/" + gun2.name;
-            FileStream stream = new FileStream(path, FileMode.Create);
-            stream.Close();
-            equipped.Add(gun2.name);
+            equipped.Add(new gun(gun2.level, gun2.name));
         }
     }
 }
@@ -165,7 +162,18 @@ public class PlayerData{
     }
 }
 
+[System.Serializable]
+public class gun{
+    public int level;
+    public string name;
+    public gun(int level, string name){
+        this.level = level;
+        this.name = name;
+    }
+}
 public static class livegamedata{
+    public static Subdungeon currentdungeon;
+    public static PlayerData currentdata;
     public static Subdungeon currentlevel;
     public static bool paused = false;
 

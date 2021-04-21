@@ -6,6 +6,7 @@ public class MusicPlayer : MonoBehaviour
 {
     // Start is called before the first frame update
     public AudioSource audioSource;
+
     void Start()
     {
         DontDestroyOnLoad(this.gameObject);

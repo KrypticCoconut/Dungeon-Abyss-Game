@@ -75,8 +75,6 @@ public static class SaveSystem{
             return new GameData(null, playerdata);
         }
     }
-    
-
 
     public static GameData ConvSaveData(SaveDataAll data){
 
@@ -92,16 +90,15 @@ public static class SaveSystem{
         playerdata.armor = data.armor;
         playerdata.health = data.health;
         GunInfo temp;
-        foreach(string gun in data.owned){
-            GunInfo.Guns.TryGetValue(gun, out temp);
+        foreach(gun gun in data.owned){
+            GunInfo.Guns.TryGetValue(gun.name, out temp);
+            temp.level = gun.level;
             playerdata.owned.Add(temp);
         }
-        foreach(string gun in data.equipped){
-            GunInfo.Guns.TryGetValue(gun, out temp);
+        foreach(gun gun in data.equipped){
+            GunInfo.Guns.TryGetValue(gun.name, out temp);
+            temp.level = gun.level;
             playerdata.equipped.Add(temp);
-            string path = Application.persistentDataPath + "/" + temp;
-            FileStream stream = new FileStream(path, FileMode.Create);
-            stream.Close();
         }
         return playerdata;
     }

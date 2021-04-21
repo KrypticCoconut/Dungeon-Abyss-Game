@@ -19,16 +19,21 @@ public class GunDoublePistol : MonoBehaviour
     float multishotangle;
 
     // Start is called before the first frame update
-    void Awake()
+    void Awake(){
+        GetComponent<gameinitiater>().funcs.Add(Initer);
+    }
+    public void Initer()
     {
-        thePlayer = GameObject.Find("Player");
+        // print("adding");
+        // thePlayer = GameObject.Find("Player");
         GunInfo doublepistol = new GunInfo("doublepistol",0, 40, 1, 20, 2, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, DoublePistolReload);
         EquippedGun = doublepistol;
         GunInfo.Guns.Add(doublepistol.name, doublepistol);
     }
 
     // Update is called once per frame
-    public void DoublePistolReload(){
+    public void DoublePistolReload(GameObject thePlayer){
+        this.thePlayer = thePlayer;
         if(Input.GetMouseButtonDown(0) && readytoshoot)
         {
             readytoshoot = false;
@@ -49,16 +54,16 @@ public class GunDoublePistol : MonoBehaviour
             multishotangle = (EquippedGun.multishot/2) * -10;
         }
         GameObject enemytohit = GetClosestEnemy();
-        GameObject shootingpoint = gameObject.transform.GetChild(0).gameObject;
+        GameObject shootingpoint = thePlayer.transform.GetChild(0).gameObject;
         multishotcount = Enumerable.Range(1, (int)EquippedGun.multishot);
-        bullet = Instantiate(EquippedGun.bullet, new Vector3(shootingpoint.transform.position.x, shootingpoint.transform.position.y, -9 ), thePlayer.transform.rotation);
-        StartCoroutine(DoublePistolBulletModifier(bullet, EquippedGun, enemytohit));
-        // foreach (int i in multishotcount)
-        // {
-        //     bullet = Instantiate(EquippedGun.bullet, new Vector3(shootingpoint.transform.position.x, shootingpoint.transform.position.y, -9 ), thePlayer.transform.rotation * Quaternion.Euler(0, 0, multishotangle));
-        //     StartCoroutine(DoublePistolBulletModifier(bullet, EquippedGun, enemytohit));
-        //     multishotangle += 10;
-        // }
+            // bullet = Instantiate(EquippedGun.bullet, new Vector3(shootingpoint.transform.position.x, shootingpoint.transform.position.y, -9 ), thePlayer.transform.rotation);
+            // StartCoroutine(DoublePistolBulletModifier(bullet, EquippedGun, enemytohit));
+        foreach (int i in multishotcount)
+        {
+            bullet = Instantiate(EquippedGun.bullet, new Vector3(shootingpoint.transform.position.x, shootingpoint.transform.position.y, -9 ), thePlayer.transform.rotation * Quaternion.Euler(0, 0, multishotangle));
+            StartCoroutine(DoublePistolBulletModifier(bullet, EquippedGun, enemytohit));
+            multishotangle += 20;
+        }
     }
 
 
@@ -73,7 +78,7 @@ public class GunDoublePistol : MonoBehaviour
             Vector2 distance = bullet.transform.InverseTransformPoint(new Vector2(enemytohit.transform.position.x, enemytohit.transform.position.y)).normalized;
             print("distance: " + bullet.transform.InverseTransformDirection(new Vector2(enemytohit.transform.position.x, enemytohit.transform.position.y)) + " : " + bullet.transform.InverseTransformDirection(bullet.transform.position)) ;
             Vector2 previousdistance = new Vector2(0,1);
-            float followingsteepness  = .5f;
+            float followingsteepness  = .005f;
             while(!bullet.GetComponent<MoveForward>().hit){
                 distance = bullet.transform.InverseTransformPoint(new Vector2(enemytohit.transform.position.x, enemytohit.transform.position.y)).normalized;
                 Vector2 diff = distance - previousdistance;

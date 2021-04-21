@@ -15,16 +15,20 @@ public class GunPistol : MonoBehaviour
     public int shotnumber;
     public GameObject bullet;
     // Start is called before the first frame update
-    void Awake()
+    void Awake(){
+        GetComponent<gameinitiater>().funcs.Add(Initer);
+    }
+    void Initer()
     {
-        thePlayer = GameObject.Find("Player");
+        //thePlayer = GameObject.Find("Player");
         GunInfo pistol = new GunInfo("pistol",0, 40, 1, 20, 1, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, PistolReload);
         EquippedGun = pistol;
         GunInfo.Guns.Add(pistol.name, pistol);
     }
 
     // Update is called once per frame
-    public void PistolReload(){
+    public void PistolReload(GameObject thePlayer){
+        this.thePlayer = thePlayer;
         if(Input.GetMouseButtonDown(0) && readytoshoot)
         {
             readytoshoot = false;

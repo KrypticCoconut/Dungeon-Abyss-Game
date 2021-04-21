@@ -7,6 +7,7 @@ public class OptionsClick : MonoBehaviour
     public MenuButtonController controller;
     public Animator animator;
     public GameObject WarningWindow;
+    public GameObject loader;
     public GameObject panel;
 
     public GameObject canvas;
@@ -48,6 +49,7 @@ public class OptionsClick : MonoBehaviour
             animator.SetBool ("selected", false);
         }
         if(runfunc){
+            StartCoroutine(loader.GetComponent<loadscene>().Loadingscreen("testscene"));
         }
     }
 
