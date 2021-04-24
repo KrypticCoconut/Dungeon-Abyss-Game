@@ -10,12 +10,15 @@ public class GunDoublePistol : MonoBehaviour
 {
     Transform[] enemies;
     GameObject thePlayer;
+    int bothhit;
     public GunInfo EquippedGun;
     bool readytoshoot = true;
     float spreadvar;
+    public Sprite icon;
+    public Sprite specialicon;
     IEnumerable<int> multishotcount;
     bool even;
-    public GameObject bullet;
+    GameObject bullet;
     float multishotangle;
 
     // Start is called before the first frame update
@@ -24,9 +27,8 @@ public class GunDoublePistol : MonoBehaviour
     }
     public void Initer()
     {
-        // print("adding");
-        // thePlayer = GameObject.Find("Player");
-        GunInfo doublepistol = new GunInfo("doublepistol",0, 40, 1, 20, 2, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, DoublePistolReload);
+        GunUiInfo info = new GunUiInfo(icon,specialicon,"Homing bullets", "the shots fired home in on enemies and if both of them hit it the gun instantly reloads");
+        GunInfo doublepistol = new GunInfo("doublepistol",0, 20, 2, 20, 2, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, DoublePistolReload, info);
         EquippedGun = doublepistol;
         GunInfo.Guns.Add(doublepistol.name, doublepistol);
     }
@@ -46,23 +48,24 @@ public class GunDoublePistol : MonoBehaviour
         if (EquippedGun.multishot % 2 == 0)
         {
             even = true;
-            multishotangle = ((EquippedGun.multishot-1)/2) *-20;
+            multishotangle = ((EquippedGun.multishot-1)/2) *-50;
         }
         else
         {
             even = false;
-            multishotangle = (EquippedGun.multishot/2) * -10;
+            multishotangle = (EquippedGun.multishot/2) * -50;
         }
         GameObject enemytohit = GetClosestEnemy();
         GameObject shootingpoint = thePlayer.transform.GetChild(0).gameObject;
         multishotcount = Enumerable.Range(1, (int)EquippedGun.multishot);
+        bothhit = 0;
             // bullet = Instantiate(EquippedGun.bullet, new Vector3(shootingpoint.transform.position.x, shootingpoint.transform.position.y, -9 ), thePlayer.transform.rotation);
             // StartCoroutine(DoublePistolBulletModifier(bullet, EquippedGun, enemytohit));
         foreach (int i in multishotcount)
         {
             bullet = Instantiate(EquippedGun.bullet, new Vector3(shootingpoint.transform.position.x, shootingpoint.transform.position.y, -9 ), thePlayer.transform.rotation * Quaternion.Euler(0, 0, multishotangle));
             StartCoroutine(DoublePistolBulletModifier(bullet, EquippedGun, enemytohit));
-            multishotangle += 20;
+            multishotangle += 50;
         }
     }
 
@@ -76,9 +79,8 @@ public class GunDoublePistol : MonoBehaviour
         if(enemytohit){
             print(enemytohit.name);
             Vector2 distance = bullet.transform.InverseTransformPoint(new Vector2(enemytohit.transform.position.x, enemytohit.transform.position.y)).normalized;
-            print("distance: " + bullet.transform.InverseTransformDirection(new Vector2(enemytohit.transform.position.x, enemytohit.transform.position.y)) + " : " + bullet.transform.InverseTransformDirection(bullet.transform.position)) ;
             Vector2 previousdistance = new Vector2(0,1);
-            float followingsteepness  = .005f;
+            float followingsteepness  = 5f * Time.deltaTime;
             while(!bullet.GetComponent<MoveForward>().hit){
                 distance = bullet.transform.InverseTransformPoint(new Vector2(enemytohit.transform.position.x, enemytohit.transform.position.y)).normalized;
                 Vector2 diff = distance - previousdistance;
@@ -100,15 +102,13 @@ public class GunDoublePistol : MonoBehaviour
                 }
                 previousdistance = distance;
                 bullet.transform.Translate(distance * shotby.BulletSpeed * Time.deltaTime);
-                print(previousdistance + ": " + distance);
                 yield return new WaitForEndOfFrame();
             }
                 
         }
         else{
-            print("enemy not found");
             while(!bullet.GetComponent<MoveForward>().hit){
-                bullet.transform.Translate(new Vector2(0, 1) * (shotby.BulletSpeed-1) * Time.deltaTime);
+                bullet.transform.Translate(new Vector2(0, 1) * shotby.BulletSpeed * Time.deltaTime);
                 yield return new WaitForEndOfFrame();   
             }
         }
@@ -137,6 +137,10 @@ public class GunDoublePistol : MonoBehaviour
         }
         if (enemy.tag != "Player")
         {
+            bothhit += 1;
+            if(bothhit >= 2){
+                readytoshoot = true;
+            }
             Destroy(bullet);
         }
     }
@@ -160,7 +164,7 @@ public class GunDoublePistol : MonoBehaviour
         GameObject[] hitColliders = Physics2D.OverlapCircleAll(thePlayer.transform.position, 20f).Select(value => value.gameObject).ToArray();
         GameObject closest = null; 
         foreach(GameObject hit in hitColliders){
-            if(hit.tag  == "Obstacles"){
+            if(hit.tag  == "enemy"){
                 if(closest == null){
                     closest = hit;
                     continue;

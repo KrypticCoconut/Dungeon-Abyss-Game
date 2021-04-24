@@ -5,17 +5,21 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using UnityEngine.UI;
 public class shooting : MonoBehaviour
 {
     // Start is called before the first frame update
     GameObject thePlayer;
-    public PlayerData temp;
-    public GunInfo EquippedGun;
+    PlayerData temp;
+    GunInfo EquippedGun;
     bool readytoshoot = true;
     float spreadvar;
     IEnumerable<int> multishotcount;
     bool even;
     public GameObject bullet;
+    public GameObject gun1;
+    bool readytoswitch = true;
+    public GameObject gun2;
     float multishotangle;
     PlayerData currentdata;
     void Start()
@@ -23,23 +27,54 @@ public class shooting : MonoBehaviour
         thePlayer = GameObject.Find("Player");
         currentdata = livegamedata.currentdata;
         EquippedGun = currentdata.equipped[0];
-        print(transform.InverseTransformPoint(transform.position) + ", " + transform.position);
+        if(currentdata.equipped[0].level >= 10){
+            gun1.transform.GetChild(0).GetComponent<Image>().sprite = currentdata.equipped[0].uiInfo.specialicon;
+        }
+        else{
+            gun1.transform.GetChild(0).GetComponent<Image>().sprite = currentdata.equipped[0].uiInfo.icon;
+        }
+        if(currentdata.equipped[1].level >= 10){
+            gun2.transform.GetChild(0).GetComponent<Image>().sprite = currentdata.equipped[1].uiInfo.specialicon;
+        }
+        else{
+            gun2.transform.GetChild(0).GetComponent<Image>().sprite = currentdata.equipped[1].uiInfo.icon;
+        }
+        switchgun(gun1, gun2);
 
     }
 
     // Update is called once per frame
+    
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1)){
+        if(Input.GetKeyDown(KeyCode.Alpha1) && readytoswitch){
             EquippedGun = currentdata.equipped[0];
+            switchgun(gun1, gun2);
+            readytoswitch = false;
+            Invoke("switchguns", 2);
         }
-        if(Input.GetKeyDown(KeyCode.Alpha2)){
+        if(Input.GetKeyDown(KeyCode.Alpha2) && readytoswitch){
+            switchgun(gun2, gun1);
             EquippedGun = currentdata.equipped[1];
+            readytoswitch = false;
+            Invoke("switchguns", 2);
         }
         if(EquippedGun.level >= 10){
-            
+            EquippedGun.shootfunc(thePlayer);
         }
-        EquippedGun.shootfunc(thePlayer);
+        else{
+            DefaultReload();
+        }
+    }
+    void switchgun(GameObject gun, GameObject othergun){
+
+        gun.GetComponent<Image>().color = new Color(1,1,1,1f);
+        gun.transform.GetChild(0).GetComponent<Image>().color = new Color(1,1,1,1f);
+        othergun.GetComponent<Image>().color = new Color(1,1,1,.5f);
+        othergun.transform.GetChild(0).GetComponent<Image>().color = new Color(1,1,1,.5f);
+    }
+    void switchguns(){
+        readytoswitch = true;
     }
     void ReadyToShoot()
     {
@@ -61,10 +96,12 @@ public class shooting : MonoBehaviour
         if (EquippedGun.AllowButtonHold && Input.GetMouseButton(0) && readytoshoot)
         {
             readytoshoot = false;
+            Invoke("ReadyToShoot", EquippedGun.FireRate);
         }
         else if(Input.GetMouseButtonDown(0) && readytoshoot && !EquippedGun.AllowButtonHold)
         {
             readytoshoot = false;
+            Invoke("ReadyToShoot", EquippedGun.FireRate);
             DefaultShoot();
         }
     }
@@ -96,7 +133,6 @@ public class shooting : MonoBehaviour
                 if (multishotangle == 0 && even == false)
                 {
                     multishotangle += 10;
-                    print("trye");
                 }
             }
         }
@@ -120,11 +156,13 @@ public class shooting : MonoBehaviour
             bullet.GetComponent<MoveForward>().enableraycast = true;
         }
         while(!hit){
+            hit = bullet.GetComponent<MoveForward>().hit;
             bullet.transform.Translate(new Vector2(0, 1) * shotby.BulletSpeed * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
+        
         Collider2D enemy = bullet.GetComponent<MoveForward>().enemyhit;
-        if (enemy.CompareTag("enemy"))
+         if (enemy.CompareTag("enemy"))
         {
             float damage;
             bool Crit = Chance(EquippedGun.CC);
@@ -145,7 +183,7 @@ public class shooting : MonoBehaviour
         }
         if (enemy.tag != "Player")
         {
-            Destroy(gameObject);
+            Destroy(bullet);
         }
     }
 

@@ -6,6 +6,7 @@ public class MoveForward : MonoBehaviour
 {
     public Collider2D enemyhit;
     public bool hit;
+    public Vector2 trajectory = new Vector2(0,1);
     public bool enableraycast;
 
     private void OnTriggerEnter2D(Collider2D enemy)

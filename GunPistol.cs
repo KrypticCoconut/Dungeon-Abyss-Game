@@ -6,22 +6,24 @@ public class GunPistol : MonoBehaviour
 {
 
     GameObject thePlayer;
-    public GunInfo EquippedGun;
+    GunInfo EquippedGun;
     bool readytoshoot = true;
     float spreadvar;
     IEnumerable<int> multishotcount;
-    public float damagedone;
+    float damagedone;
     bool even;
-    public int shotnumber;
-    public GameObject bullet;
+    int shotnumber;
+    GameObject bullet;
+    public Sprite icon;
+    public Sprite specialicon;
     // Start is called before the first frame update
     void Awake(){
         GetComponent<gameinitiater>().funcs.Add(Initer);
     }
     void Initer()
     {
-        //thePlayer = GameObject.Find("Player");
-        GunInfo pistol = new GunInfo("pistol",0, 40, 1, 20, 1, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, PistolReload);
+        GunUiInfo info = new GunUiInfo(icon,specialicon,"Ace", "Every 4th shot does 2 times the damage done in the last 3 shots");
+        GunInfo pistol = new GunInfo("pistol",0, 40, 1, 20, 1, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, PistolReload, info);
         EquippedGun = pistol;
         GunInfo.Guns.Add(pistol.name, pistol);
     }
@@ -67,7 +69,7 @@ public class GunPistol : MonoBehaviour
                 damage = EquippedGun.Damage;
             }
             if(shotnumber == 4){
-                damage = damagedone*2 + damage;
+                damage = damagedone*2;
                 shotnumber = 0;
             }
             else{

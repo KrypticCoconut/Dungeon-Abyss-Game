@@ -56,6 +56,19 @@ public class guns : MonoBehaviour
         // GunInfo shotgun = new GunInfo("shotgun",0, 60, .7f, 60, 7, 40, 1.5f, single_shot_effect, bullet, false, 0);
     }
 }
+
+public class GunUiInfo{
+    public Sprite icon;
+    public string specialname;
+    public string specialdesc;
+    public Sprite specialicon;
+    public GunUiInfo(Sprite icon, Sprite sicon, string sname, string sdesc){
+        this.specialdesc = sdesc;
+        this.specialname = sname;
+        this.specialicon = sicon;
+        this.icon = icon;
+    }
+}
 public class GunInfo
 {
     public delegate void Shootfunc(GameObject theplayer); 
@@ -74,9 +87,10 @@ public class GunInfo
     public GameObject HitEffect;
     public GameObject bullet;
     public bool AllowButtonHold;
+    public GunUiInfo uiInfo;
 
     public int level;
-    public GunInfo(string name, float BulletSpread, float BulletSpeed, float FireRate, float Damage, float multishot, float CC, float CD, GameObject HitEffect, GameObject bullet, bool AllowButtonHold, float recoil, Shootfunc function)
+    public GunInfo(string name, float BulletSpread, float BulletSpeed, float FireRate, float Damage, float multishot, float CC, float CD, GameObject HitEffect, GameObject bullet, bool AllowButtonHold, float recoil, Shootfunc function, GunUiInfo uinfo)
     {
         this.shootfunc = function;
         this.name = name;
@@ -91,6 +105,7 @@ public class GunInfo
         this.bullet = bullet;
         this.AllowButtonHold = AllowButtonHold;
         this.recoil = recoil;
+        this.uiInfo = uinfo;
         this.level = 1;
 
     }

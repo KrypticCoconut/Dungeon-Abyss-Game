@@ -17,7 +17,6 @@ public class gameinitiater : MonoBehaviour
             GameData currentsave = SaveSystem.LoadSave();
             livegamedata.currentdungeon = currentsave.dungeon;
             livegamedata.currentdata = currentsave.data;
-            print(currentsave.data.owned[0].name);
             oneinstance = this;
         }
         else{
