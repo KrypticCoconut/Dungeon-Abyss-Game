@@ -179,15 +179,10 @@ public class shooting : MonoBehaviour
             {
                 Instantiate(EquippedGun.HitEffect, enemy.transform.position, Quaternion.identity);
             }
-
         }
         if (enemy.tag != "Player")
         {
             Destroy(bullet);
         }
     }
-
-
-
-
 }

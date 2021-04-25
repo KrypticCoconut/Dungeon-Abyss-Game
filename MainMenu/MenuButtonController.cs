@@ -22,6 +22,7 @@ public class MenuButtonController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        print(reservesoundtime);
         if(livegamedata.paused){
             return;
         }
