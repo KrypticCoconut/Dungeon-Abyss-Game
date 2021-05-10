@@ -174,11 +174,7 @@ public class shooting : MonoBehaviour
             {
                 damage = EquippedGun.Damage;
             }
-            enemy.GetComponent<enemyhealth>().health -= damage;
-            if (enemy.GetComponent<enemyhealth>().health <= 0)
-            {
-                Instantiate(EquippedGun.HitEffect, enemy.transform.position, Quaternion.identity);
-            }
+            enemy.GetComponent<playereffects>().hit(damage, EquippedGun.HitEffect);
         }
         if (enemy.tag != "Player")
         {

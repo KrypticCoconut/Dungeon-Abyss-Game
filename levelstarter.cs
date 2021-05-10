@@ -32,6 +32,8 @@ public class levelstarter : MonoBehaviour
         Rect levelspace = new Rect(0f, 0f, level.room.width, level.room.height);
         DrawSingleRoom(levelspace);
         spawnobstacles(level.walls);
+        GameObject.Find("Player").GetComponent<SpriteRenderer>().sortingOrder = 500;    
+        GameObject.Find("Player").transform.position = levelspace.center;
     }
 
     void DrawSingleRoom(Rect room){

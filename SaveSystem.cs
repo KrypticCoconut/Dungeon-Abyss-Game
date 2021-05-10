@@ -89,6 +89,8 @@ public static class SaveSystem{
         PlayerData playerdata = new PlayerData();
         playerdata.armor = data.armor;
         playerdata.health = data.health;
+        playerdata.shards = data.shards;
+        playerdata.coins = data.coins;
         GunInfo temp;
         foreach(gun gun in data.owned){
             GunInfo.Guns.TryGetValue(gun.name, out temp);

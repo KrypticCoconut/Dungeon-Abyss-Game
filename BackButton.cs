@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class BackButton : MonoBehaviour
 {
+    public string scene;
     public void LoadSceneMain(){
         if(livegamedata.paused){
             return;
         }
-        SceneManager.LoadScene("Menu", LoadSceneMode.Single);
+        SceneManager.LoadScene(scene, LoadSceneMode.Single);
     }
 }

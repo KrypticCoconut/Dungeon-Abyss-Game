@@ -23,7 +23,7 @@ public class GunPistol : MonoBehaviour
     void Initer()
     {
         GunUiInfo info = new GunUiInfo(icon,specialicon,"Ace", "Every 4th shot does 2 times the damage done in the last 3 shots");
-        GunInfo pistol = new GunInfo("pistol",0, 40, 1, 20, 1, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, PistolReload, info);
+        GunInfo pistol = new GunInfo("pistol",0, 40, 1, 20, 1, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, PistolReload, info, 1000);
         EquippedGun = pistol;
         GunInfo.Guns.Add(pistol.name, pistol);
     }
@@ -75,11 +75,7 @@ public class GunPistol : MonoBehaviour
             else{
                 damagedone += damage;
             }
-            enemy.GetComponent<enemyhealth>().health -= damage;
-            if (enemy.GetComponent<enemyhealth>().health <= 0)
-            {
-                Instantiate(EquippedGun.HitEffect, enemy.transform.position, Quaternion.identity);
-            }
+            enemy.GetComponent<playereffects>().hit(damage, EquippedGun.HitEffect);
 
         }
         if (enemy.tag != "Player")

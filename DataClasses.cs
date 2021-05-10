@@ -81,9 +81,13 @@ public class SaveDataDungeon{
 public class SaveDataPlayerData{
     public int health;
     public int armor;
+    public int shards;
+    public int coins;
     public List<gun> owned = new List<gun>();
     public List<gun> equipped = new List<gun>();
     public SaveDataPlayerData(PlayerData data){
+        this.coins = data.coins;
+        this.shards = data.shards;
         this.health = data.health;
         this.armor = data.armor;
         foreach(GunInfo gun in data.owned){
@@ -145,6 +149,8 @@ public class GameData{
 public class PlayerData{
     public List<GunInfo> owned = new List<GunInfo>();  
     public List<GunInfo> equipped = new List<GunInfo>();
+    public int coins = 100;
+    public int shards = 0;
     public static List<string> startingguns = new List<string>() {"pistol", "doublepistol"};
     public int health;
     public int armor;
@@ -152,6 +158,8 @@ public class PlayerData{
     public void createdefaultsetting(){
         armor = 0;
         health = 300;
+        coins = 100;
+        shards = 0;
         foreach(string gun in startingguns){
             GunInfo temp;
             GunInfo.Guns.TryGetValue(gun, out temp);

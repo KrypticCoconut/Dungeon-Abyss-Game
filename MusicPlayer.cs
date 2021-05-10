@@ -6,7 +6,6 @@ public class MusicPlayer : MonoBehaviour
 {
     // Start is called before the first frame update
     public AudioSource audioSource;
-    public bool reservetime = false;
 
     void Start()
     {
@@ -16,11 +15,6 @@ public class MusicPlayer : MonoBehaviour
     // Update is called once per frame
     public void PlayMusic(AudioClip clip)
     {
-        if(!reservetime){
         audioSource.PlayOneShot(clip);
-        }
-        else{
-            reservetime = true;
-        }
     }
 }

@@ -75,7 +75,7 @@ public class GunInfo
     public Shootfunc shootfunc;
     public string name;
     public static IDictionary<string, GunInfo> Guns = new Dictionary<string, GunInfo>();
-
+    public int money;
     public float BulletSpread;
     public float BulletSpeed;
     public float FireRate;
@@ -90,7 +90,7 @@ public class GunInfo
     public GunUiInfo uiInfo;
 
     public int level;
-    public GunInfo(string name, float BulletSpread, float BulletSpeed, float FireRate, float Damage, float multishot, float CC, float CD, GameObject HitEffect, GameObject bullet, bool AllowButtonHold, float recoil, Shootfunc function, GunUiInfo uinfo)
+    public GunInfo(string name, float BulletSpread, float BulletSpeed, float FireRate, float Damage, float multishot, float CC, float CD, GameObject HitEffect, GameObject bullet, bool AllowButtonHold, float recoil, Shootfunc function, GunUiInfo uinfo, int money)
     {
         this.shootfunc = function;
         this.name = name;

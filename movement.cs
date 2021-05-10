@@ -39,7 +39,7 @@ public class movement : MonoBehaviour
     void FixedUpdate()
     {
         if(held){
-            if(speed <= 15){
+            if(speed <= 4){
                 speed = speed + .05f * Time.deltaTime;
             }
             if(cam.orthographicSize < 20){
@@ -48,7 +48,7 @@ public class movement : MonoBehaviour
         }
         else{
             speed = 1;
-            targetzoom = 15;
+            targetzoom = 4;
             if(cam.orthographicSize > targetzoom){
                 cam.orthographicSize += -1 * Time.deltaTime;
             }

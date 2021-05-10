@@ -28,7 +28,7 @@ public class GunDoublePistol : MonoBehaviour
     public void Initer()
     {
         GunUiInfo info = new GunUiInfo(icon,specialicon,"Homing bullets", "the shots fired home in on enemies and if both of them hit it the gun instantly reloads");
-        GunInfo doublepistol = new GunInfo("doublepistol",0, 20, 2, 20, 2, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, DoublePistolReload, info);
+        GunInfo doublepistol = new GunInfo("doublepistol",0, 20, 2, 20, 2, 10, 1, GetComponent<GunClasses>().single_shot_effect, GetComponent<GunClasses>().bullet, false, 0, DoublePistolReload, info, 500);
         EquippedGun = doublepistol;
         GunInfo.Guns.Add(doublepistol.name, doublepistol);
     }
@@ -128,11 +128,7 @@ public class GunDoublePistol : MonoBehaviour
             {
                 damage = EquippedGun.Damage;
             }
-            enemy.GetComponent<enemyhealth>().health -= damage;
-            if (enemy.GetComponent<enemyhealth>().health <= 0)
-            {
-                Instantiate(EquippedGun.HitEffect, enemy.transform.position, Quaternion.identity);
-            }
+            enemy.GetComponent<playereffects>().hit(damage, EquippedGun.HitEffect);
 
         }
         if (enemy.tag != "Player")

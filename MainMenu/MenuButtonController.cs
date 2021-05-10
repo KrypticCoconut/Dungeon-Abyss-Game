@@ -22,11 +22,11 @@ public class MenuButtonController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(reservesoundtime);
         if(livegamedata.paused){
             return;
         }
         if(Input.GetKeyDown("w") || Input.GetKeyDown(KeyCode.UpArrow)){
+            print("input"); 
             if(index == null){
                 index = maxIndex+1;
             }
