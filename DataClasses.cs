@@ -80,7 +80,7 @@ public class SaveDataDungeon{
 [System.Serializable]
 public class SaveDataPlayerData{
     public int health;
-    public int armor;
+    public float volume;
     public int shards;
     public int coins;
     public List<gun> owned = new List<gun>();
@@ -89,13 +89,14 @@ public class SaveDataPlayerData{
         this.coins = data.coins;
         this.shards = data.shards;
         this.health = data.health;
-        this.armor = data.armor;
+        this.volume = data.volume;
         foreach(GunInfo gun in data.owned){
-            owned.Add(new gun(gun.level, gun.name));
+            owned.Add(new gun(gun.chancetoupgrade, gun.name, gun.upgraded));
         }
         foreach(GunInfo gun2 in data.equipped){
-            equipped.Add(new gun(gun2.level, gun2.name));
+            equipped.Add(new gun(gun2.chancetoupgrade, gun2.name, gun2.upgraded));
         }
+
     }
 }
 
@@ -149,21 +150,20 @@ public class GameData{
 public class PlayerData{
     public List<GunInfo> owned = new List<GunInfo>();  
     public List<GunInfo> equipped = new List<GunInfo>();
-    public int coins = 100;
-    public int shards = 0;
+    public int coins;
+    public int shards;
     public static List<string> startingguns = new List<string>() {"pistol", "doublepistol"};
     public int health;
-    public int armor;
+    public float volume;
 
     public void createdefaultsetting(){
-        armor = 0;
+        volume = 1;
         health = 300;
         coins = 100;
         shards = 0;
         foreach(string gun in startingguns){
             GunInfo temp;
             GunInfo.Guns.TryGetValue(gun, out temp);
-
             owned.Add(temp);
             equipped.Add(temp);
         }
@@ -172,13 +172,16 @@ public class PlayerData{
 
 [System.Serializable]
 public class gun{
-    public int level;
+    public float chance = 1;
+    public bool upgraded = false;
     public string name;
-    public gun(int level, string name){
-        this.level = level;
+    public gun(float chance, string name, bool upgraded){
+        this.chance = chance;
         this.name = name;
+        this.upgraded = upgraded;
     }
 }
+
 public static class livegamedata{
     public static Subdungeon currentdungeon;
     public static PlayerData currentdata;

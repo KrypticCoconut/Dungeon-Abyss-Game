@@ -13,7 +13,10 @@ public class buygun : MonoBehaviour
     {
         Musicplayer = GameObject.Find("MusicPlayer");
     }
-    void buycurrentgun(){
+    public void buycurrentgun(){
+        if(livegamedata.paused){
+            return;
+        }
         Musicplayer.GetComponent<MusicPlayer>().PlayMusic(click);
         GunInfo gun; 
         GunInfo.Guns.TryGetValue(name, out gun);

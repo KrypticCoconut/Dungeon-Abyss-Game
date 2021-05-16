@@ -27,13 +27,14 @@ public class shooting : MonoBehaviour
         thePlayer = GameObject.Find("Player");
         currentdata = livegamedata.currentdata;
         EquippedGun = currentdata.equipped[0];
-        if(currentdata.equipped[0].level >= 10){
+        currentdata.equipped[0].upgraded = true;
+        if(currentdata.equipped[0].upgraded){
             gun1.transform.GetChild(0).GetComponent<Image>().sprite = currentdata.equipped[0].uiInfo.specialicon;
         }
         else{
             gun1.transform.GetChild(0).GetComponent<Image>().sprite = currentdata.equipped[0].uiInfo.icon;
         }
-        if(currentdata.equipped[1].level >= 10){
+        if(currentdata.equipped[1].upgraded){
             gun2.transform.GetChild(0).GetComponent<Image>().sprite = currentdata.equipped[1].uiInfo.specialicon;
         }
         else{
@@ -59,7 +60,7 @@ public class shooting : MonoBehaviour
             readytoswitch = false;
             Invoke("switchguns", 2);
         }
-        if(EquippedGun.level >= 10){
+        if(EquippedGun.upgraded){
             EquippedGun.shootfunc(thePlayer);
         }
         else{

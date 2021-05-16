@@ -49,7 +49,7 @@ public class OptionsClick : MonoBehaviour
             animator.SetBool ("selected", false);
         }
         if(runfunc){
-            StartCoroutine(loader.GetComponent<loadscene>().Loadingscreen("shop"));
+            StartCoroutine(loader.GetComponent<loadscene>().Loadingscreen("guns"));
         }
     }
 

@@ -14,9 +14,8 @@ public class MenuButtonController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //index = 0;
         MusicObject = GameObject.Find("MusicPlayer");
-        maxIndex = gameObject.transform.GetChild(0).childCount - 1;
+        maxIndex = gameObject.transform.GetChild(1).childCount - 1;
     }
 
     // Update is called once per frame
@@ -26,7 +25,6 @@ public class MenuButtonController : MonoBehaviour
             return;
         }
         if(Input.GetKeyDown("w") || Input.GetKeyDown(KeyCode.UpArrow)){
-            print("input"); 
             if(index == null){
                 index = maxIndex+1;
             }

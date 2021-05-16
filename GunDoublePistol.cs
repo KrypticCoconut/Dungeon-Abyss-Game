@@ -13,7 +13,6 @@ public class GunDoublePistol : MonoBehaviour
     int bothhit;
     public GunInfo EquippedGun;
     bool readytoshoot = true;
-    float spreadvar;
     public Sprite icon;
     public Sprite specialicon;
     IEnumerable<int> multishotcount;

@@ -23,6 +23,10 @@ public class gunselect : MonoBehaviour
     public GunInfo gun;
     bool done = false;
     public TextMeshProUGUI price;
+    public Image sicon;
+    public TextMeshProUGUI stitle;
+    public TextMeshProUGUI sdesc;
+    public Sprite questionmarks;
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +52,9 @@ public class gunselect : MonoBehaviour
 
     // Update is called once per frame
     public void enter(){  
+        if(livegamedata.paused){
+            return;
+        }
         if(!done){
             return;
         }
@@ -55,12 +62,18 @@ public class gunselect : MonoBehaviour
 
     }
     public void exit(){
+        if(livegamedata.paused){
+            return;
+        }
         if(!done){
             return;
         }
         animator.SetBool("selected", false);
     }
     public void click(){
+        if(livegamedata.paused){
+            return;
+        }
         if(!done){
             return;
         }
@@ -68,18 +81,22 @@ public class gunselect : MonoBehaviour
         Invoke("stopclick", animator.GetCurrentAnimatorStateInfo(0).speed * animator.GetCurrentAnimatorStateInfo(0).length);
     }
     public void stopclick(){
+        if(livegamedata.paused){
+            return;
+        }
         this.switchguns.GetComponent<switchguns>().currentgun = gameObject;
         Setgun1 = this.switchguns.GetComponent<switchguns>().changewithGun1;
         Setgun2 = this.switchguns.GetComponent<switchguns>().changewithGun2;
         animator.SetBool ("pressed", false);
         animator.SetBool ("selected", false);
-        price.text = "price: " + gun.money + "  <sprite=0>";
         buybutton.GetComponent<buygun>().name = gun.name;
         buybutton.GetComponent<buygun>().gunobj = gameObject;
         if(!livegamedata.currentdata.owned.Contains(gun)){
             price.gameObject.SetActive(true);
-            buybutton.SetActive(true);
-
+            buybutton.SetActive(true);  
+            Setgun1.SetActive(false);
+            Setgun2.SetActive(false);
+            price.text = "price: " + gun.money + "  <sprite=0>";
             if(!(livegamedata.currentdata.coins >= gun.money)){
                 buybutton.GetComponent<Button>().enabled = false;
                 buybutton.GetComponent<Image>().color = new Color(1,1,1,0.5f);
@@ -91,6 +108,8 @@ public class gunselect : MonoBehaviour
             }
         }
         else{
+            Setgun1.SetActive(true);
+            Setgun2.SetActive(true);
             price.gameObject.SetActive(false);
             buybutton.SetActive(false);
             Setgun1.GetComponent<Button>().enabled = true;
@@ -105,6 +124,17 @@ public class gunselect : MonoBehaviour
                 Setgun2.GetComponent<Button>().enabled = false;
                 Setgun2.GetComponent<Image>().color = new Color(1,1,1,0.5f);
             }
+            
+            if(gun.upgraded){
+                sicon.sprite = gun.uiInfo.specialicon;
+                stitle.text = gun.uiInfo.specialname;
+                sdesc.text = gun.uiInfo.specialdesc;
+            }
+            else{
+                sicon.sprite = questionmarks;
+                stitle.text = "Special Ability: ????";
+                sdesc.text = "currently "+ gun.chancetoupgrade +" percent chance to unlock special ability when room cleared, clear more dungeon rooms to increase chance";
+            }
         }   
         name.text = gun.name;
         string info = "";
@@ -115,6 +145,9 @@ public class gunselect : MonoBehaviour
         this.info.text = info;
     }
     public void PlaySound(AudioClip clip){
+        if(livegamedata.paused){
+            return;
+        }
         GameObject.Find("MusicPlayer").GetComponent<MusicPlayer>().PlayMusic(clip);
     }
 }

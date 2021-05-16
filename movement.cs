@@ -39,23 +39,24 @@ public class movement : MonoBehaviour
     void FixedUpdate()
     {
         if(held){
-            if(speed <= 4){
-                speed = speed + .05f * Time.deltaTime;
+            if(speed < 25){
+                speed = speed + 3f * Time.deltaTime;
+                print(speed);
             }
             if(cam.orthographicSize < 20){
                 cam.orthographicSize += 2 * Time.deltaTime;
             }
         }
         else{
-            speed = 1;
-            targetzoom = 4;
+            speed = 10;
+            targetzoom = 10;
             if(cam.orthographicSize > targetzoom){
                 cam.orthographicSize += -1 * Time.deltaTime;
             }
         }
         if(wasdinput.x != 0f || wasdinput.y != 0f){
             held = true;
-            speed = speed + .01f;
+
         }
         else{
             held = false;

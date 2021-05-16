@@ -87,19 +87,21 @@ public static class SaveSystem{
 
     public static PlayerData ConvPlayerData(SaveDataPlayerData data){
         PlayerData playerdata = new PlayerData();
-        playerdata.armor = data.armor;
+        playerdata.volume = data.volume;
         playerdata.health = data.health;
         playerdata.shards = data.shards;
         playerdata.coins = data.coins;
         GunInfo temp;
         foreach(gun gun in data.owned){
             GunInfo.Guns.TryGetValue(gun.name, out temp);
-            temp.level = gun.level;
+            temp.chancetoupgrade = gun.chance;
+            temp.upgraded = gun.upgraded;
             playerdata.owned.Add(temp);
         }
         foreach(gun gun in data.equipped){
             GunInfo.Guns.TryGetValue(gun.name, out temp);
-            temp.level = gun.level;
+            temp.chancetoupgrade = gun.chance;
+            temp.upgraded = gun.upgraded;
             playerdata.equipped.Add(temp);
         }
         return playerdata;
@@ -153,7 +155,5 @@ public static class SaveSystem{
 
         return dungeon;
     }
-    public static void MakeNewSave(){
 
-    }
 }

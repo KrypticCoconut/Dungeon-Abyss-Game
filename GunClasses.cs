@@ -88,8 +88,8 @@ public class GunInfo
     public GameObject bullet;
     public bool AllowButtonHold;
     public GunUiInfo uiInfo;
-
-    public int level;
+    public float chancetoupgrade = 1f;
+    public bool upgraded; 
     public GunInfo(string name, float BulletSpread, float BulletSpeed, float FireRate, float Damage, float multishot, float CC, float CD, GameObject HitEffect, GameObject bullet, bool AllowButtonHold, float recoil, Shootfunc function, GunUiInfo uinfo, int money)
     {
         this.shootfunc = function;
@@ -106,7 +106,7 @@ public class GunInfo
         this.AllowButtonHold = AllowButtonHold;
         this.recoil = recoil;
         this.uiInfo = uinfo;
-        this.level = 1;
+        this.money = money;
 
     }
 }

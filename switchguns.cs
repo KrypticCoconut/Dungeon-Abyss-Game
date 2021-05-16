@@ -20,6 +20,9 @@ public class switchguns : MonoBehaviour
     // Update is called once per frame
 
     public void switchwithgun1(){
+        if(livegamedata.paused){
+            return;
+        }
         Musicplayer.GetComponent<MusicPlayer>().PlayMusic(click);
         if(currentgun == gun2){
             livegamedata.currentdata.equipped[1] = livegamedata.currentdata.equipped[0];
@@ -36,6 +39,9 @@ public class switchguns : MonoBehaviour
         SaveSystem.SaveAll(livegamedata.currentdungeon, livegamedata.currentdata);
     }
     public void switchwithgun2(){
+        if(livegamedata.paused){
+            return;
+        }
         Musicplayer.GetComponent<MusicPlayer>().PlayMusic(click);
         if(currentgun == gun1){
             livegamedata.currentdata.equipped[0] = livegamedata.currentdata.equipped[1];
