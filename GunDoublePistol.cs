@@ -127,7 +127,12 @@ public class GunDoublePistol : MonoBehaviour
             {
                 damage = EquippedGun.Damage;
             }
-            enemy.GetComponent<playereffects>().hit(damage, EquippedGun.HitEffect);
+            enemy.GetComponent<playereffects>().hp -= damage;
+            enemy.GetComponent<playereffects>().sethp();
+            if(enemy.GetComponent<playereffects>().hp <= 0 ){
+                Instantiate(EquippedGun.HitEffect, enemy.transform.position, enemy.transform.rotation);
+                Destroy(enemy.gameObject);
+            }
 
         }
         if (enemy.tag != "Player")

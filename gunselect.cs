@@ -9,6 +9,7 @@ public class gunselect : MonoBehaviour
     GameObject musicplayer;    
     public string gunname;
     public TextMeshProUGUI name;
+    public GameObject moneytracker;
     public GameObject buybutton;
     public TextMeshProUGUI info;
     // public GameObject CC;
@@ -30,6 +31,8 @@ public class gunselect : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        livegamedata.currentdata.coins = 10000;
+        livegamedata.currentdata.shards = 10000;
         animator = GetComponent<Animator>();
         musicplayer = GameObject.Find("MusicPlayer");    
         animator.SetInteger("mode", 2);
@@ -96,15 +99,33 @@ public class gunselect : MonoBehaviour
             buybutton.SetActive(true);  
             Setgun1.SetActive(false);
             Setgun2.SetActive(false);
-            price.text = "price: " + gun.money + "  <sprite=0>";
-            if(!(livegamedata.currentdata.coins >= gun.money)){
-                buybutton.GetComponent<Button>().enabled = false;
-                buybutton.GetComponent<Image>().color = new Color(1,1,1,0.5f);
-                price.GetComponent<TextMeshProUGUI>().color = new Color(1,1,1,0.5f);
+            if(gun.money > 0){
+                price.text = "price: " + gun.money + "  <sprite=0>";
             }
             else{
-                buybutton.GetComponent<Image>().color = new Color(1,1,1,1f);
-                price.GetComponent<TextMeshProUGUI>().color = new Color(1,1,1,1f);
+                price.text = "price: " + Mathf.Abs(gun.money) + "  <sprite=1>";
+            }
+            if(gun.money>0){
+                if((!(livegamedata.currentdata.coins >= Mathf.Abs(gun.money)) && gun.money >0) ){
+                    buybutton.GetComponent<Button>().enabled = false;
+                    buybutton.GetComponent<Image>().color = new Color(1,1,1,0.5f);
+                    price.GetComponent<TextMeshProUGUI>().color = new Color(1,1,1,0.5f);
+                }
+                else{
+                    buybutton.GetComponent<Image>().color = new Color(1,1,1,1f);
+                    price.GetComponent<TextMeshProUGUI>().color = new Color(1,1,1,1f);
+                }
+            }
+            else{
+                if((!(livegamedata.currentdata.shards >= Mathf.Abs(gun.money) && gun.money <0 ))) {
+                    buybutton.GetComponent<Button>().enabled = false;
+                    buybutton.GetComponent<Image>().color = new Color(1,1,1,0.5f);
+                    price.GetComponent<TextMeshProUGUI>().color = new Color(1,1,1,0.5f);
+                }
+                else{
+                    buybutton.GetComponent<Image>().color = new Color(1,1,1,1f);
+                    price.GetComponent<TextMeshProUGUI>().color = new Color(1,1,1,1f);
+                }
             }
         }
         else{
@@ -143,6 +164,7 @@ public class gunselect : MonoBehaviour
         info += "Crit Chance: " + gun.CC + "\n";
         info += "Crit Damage: " + gun.CD + "\n";
         this.info.text = info;
+        moneytracker.GetComponent<currencytracker>().UpdateCurrency();
     }
     public void PlaySound(AudioClip clip){
         if(livegamedata.paused){

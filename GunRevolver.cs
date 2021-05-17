@@ -49,7 +49,7 @@ public class GunRevolver : MonoBehaviour
     }
     public void RevolverShoot()
     {
-        bullet = Instantiate(EquippedGun.bullet, new Vector3(thePlayer.transform.position.x, thePlayer.transform.position.y, -9), thePlayer.transform.rotation * Quaternion.Euler(0, 0, UnityEngine.Random.Range(-EquippedGun.BulletSpread + (recoilperstack*stacks), EquippedGun.BulletSpread + (recoilperstack*stacks) + 1)));
+        bullet = Instantiate(EquippedGun.bullet, new Vector3(thePlayer.transform.GetChild(0).position.x, thePlayer.transform.GetChild(0).position.y, -9), thePlayer.transform.GetChild(0).rotation * Quaternion.Euler(0, 0, UnityEngine.Random.Range(-EquippedGun.BulletSpread + (recoilperstack*stacks), EquippedGun.BulletSpread + (recoilperstack*stacks) + 1)));
         StartCoroutine(RevolverBulletModifier(bullet, EquippedGun));
         thePlayer.transform.Translate(new Vector2(0, -EquippedGun.recoil * Time.deltaTime));
     }
@@ -77,7 +77,12 @@ public class GunRevolver : MonoBehaviour
             {
                 damage = EquippedGun.Damage + (damageperstack * stacks);
             }
-            enemy.GetComponent<playereffects>().hit(damage, EquippedGun.HitEffect);
+            enemy.GetComponent<playereffects>().hp -= damage;
+            enemy.GetComponent<playereffects>().sethp();
+            if(enemy.GetComponent<playereffects>().hp <= 0 ){
+                Instantiate(EquippedGun.HitEffect, enemy.transform.position, enemy.transform.rotation);
+                Destroy(enemy.gameObject);
+            }
             stacks += 1;
             StartCoroutine(stackscooldown(stacks, 2));
         }

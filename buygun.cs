@@ -21,8 +21,12 @@ public class buygun : MonoBehaviour
         GunInfo gun; 
         GunInfo.Guns.TryGetValue(name, out gun);
         livegamedata.currentdata.owned.Add(gun);
-        livegamedata.currentdata.coins -= gun.money;
-        
+        if(gun.money <0){
+            livegamedata.currentdata.shards -= Mathf.Abs(gun.money);
+        }
+        else{
+            livegamedata.currentdata.coins -= gun.money;
+        }
         gunobj.GetComponent<gunselect>().stopclick();
         SaveSystem.SaveAll(livegamedata.currentdungeon, livegamedata.currentdata);  
     }

@@ -41,7 +41,6 @@ public class movement : MonoBehaviour
         if(held){
             if(speed < 25){
                 speed = speed + 3f * Time.deltaTime;
-                print(speed);
             }
             if(cam.orthographicSize < 20){
                 cam.orthographicSize += 2 * Time.deltaTime;
