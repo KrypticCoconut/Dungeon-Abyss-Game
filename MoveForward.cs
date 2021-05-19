@@ -10,7 +10,6 @@ public class MoveForward : MonoBehaviour
     public bool enableraycast;
     public bool bounce;
     public Collision2D collision;
-    public Vector3 lastvelocity;
 
     private void OnCollisionEnter2D(Collision2D enemy)
     {
@@ -21,16 +20,15 @@ public class MoveForward : MonoBehaviour
         }
         if(bounce){
 
-            var speed = lastvelocity.magnitude;
-            var direction = Vector3.Reflect(lastvelocity.normalized,enemy.contacts[0].normal);
-            GetComponent<Rigidbody2D>().velocity = direction * Mathf.Max(speed, 0f);
-            print("direction: "+ direction +", speed: " + speed);
+            // var speed = lastvelocity.magnitude;
+            // var direction = Vector3.Reflect(lastvelocity.normalized,enemy.contacts[0].normal);
+            // GetComponent<Rigidbody2D>().velocity = direction * Mathf.Max(speed, 0f);
+            //print(lastvelocity.normalized +": " + direction.normalized);
         }
 
     }
 
     public void Update() {
-        lastvelocity = GetComponent<Rigidbody2D>().velocity;
         RaycastHit2D raycast;
         if(enableraycast){
             raycast = Physics2D.Raycast(transform.position, transform.TransformDirection(Vector2.down), 12f);

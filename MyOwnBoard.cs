@@ -23,7 +23,7 @@ public class Subdungeon
     private static int debugCounter = 0;
     public static Subdungeon root;
     public string pattern;
-    public string difficulty;
+    public  static string difficulty;
     public bool startroom = false;
 
     public Subdungeon(Rect mrect, string pattern)

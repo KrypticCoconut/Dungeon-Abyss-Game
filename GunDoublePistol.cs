@@ -55,6 +55,7 @@ public class GunDoublePistol : MonoBehaviour
             multishotangle = (EquippedGun.multishot/2) * -50;
         }
         GameObject enemytohit = GetClosestEnemy();
+        print(enemytohit.name);
         GameObject shootingpoint = thePlayer.transform.GetChild(0).gameObject;
         multishotcount = Enumerable.Range(1, (int)EquippedGun.multishot);
         bothhit = 0;
@@ -66,6 +67,7 @@ public class GunDoublePistol : MonoBehaviour
             StartCoroutine(DoublePistolBulletModifier(bullet, EquippedGun, enemytohit));
             multishotangle += 50;
         }
+
     }
 
 
@@ -76,7 +78,6 @@ public class GunDoublePistol : MonoBehaviour
 
 
         if(enemytohit){
-            print(enemytohit.name);
             Vector2 distance = bullet.transform.InverseTransformPoint(new Vector2(enemytohit.transform.position.x, enemytohit.transform.position.y)).normalized;
             Vector2 previousdistance = new Vector2(0,1);
             float followingsteepness  = 5f * Time.deltaTime;

@@ -41,7 +41,7 @@ public class GunPistol : MonoBehaviour
     public void PistolShoot()
     {
         shotnumber++;
-        bullet = Instantiate(EquippedGun.bullet, new Vector3(thePlayer.transform.GetChild(0).position.x, thePlayer.transform.GetChild(0).position.y, -9), thePlayer.transform.GetChild(0).rotation * Quaternion.Euler(0, 0, spreadvar));
+        bullet = Instantiate(EquippedGun.bullet, new Vector3(thePlayer.transform.GetChild(0).position.x, thePlayer.transform.GetChild(0).position.y, -9), thePlayer.transform.GetChild(0).rotation   * Quaternion.Euler(0, 0, spreadvar));
         StartCoroutine(PistolBulletModifier(bullet, EquippedGun));
         thePlayer.transform.Translate(new Vector2(0, -EquippedGun.recoil * Time.deltaTime));
     }
