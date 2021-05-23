@@ -48,7 +48,7 @@ public class MediumD : MonoBehaviour
         }
         if(runfunc){
             loadobj.GetComponent<loadscene>().startanim();
-            gameObject.transform.parent.GetComponentInParent<MyOwnBoard>().MakeDungeon(0,500,500,16,16);
+            gameObject.transform.parent.GetComponentInParent<MyOwnBoard>().MakeDungeon(0,500,500,16,16,2);
             loadobj.GetComponent<loadscene>().stopanim();
             runfunc = false;
         }

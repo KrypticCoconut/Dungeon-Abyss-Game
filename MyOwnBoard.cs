@@ -4,6 +4,21 @@ using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Linq;
+[System.Serializable]
+public class buffs{
+    public float dmg;
+    public float fr;
+    public float cd;
+    public float cc;
+    public float hp;
+    public buffs(float dmg, float fr, float cc, float cd, float hp){
+        this.cc = cc;
+        this.cd = cd;
+        this.dmg = dmg;
+        this.fr = fr;
+        this.hp = hp;
+    }
+}
 public class Subdungeon
 
 {
@@ -17,13 +32,12 @@ public class Subdungeon
     public Rect roomspace;
     public Rect room;
     public Rect spawnarea;
-    public bool Bossroom = false;
     public List<Rect> corridors = new List<Rect>();
+    public buffs roombuffs;
     public int DebugID = 0;
     private static int debugCounter = 0;
     public static Subdungeon root;
     public string pattern;
-    public  static string difficulty;
     public bool startroom = false;
 
     public Subdungeon(Rect mrect, string pattern)
@@ -316,21 +330,26 @@ public class MyOwnBoard : MonoBehaviour
             }
         }
     }
-    public void MakeRandBoss(int roomnos, Subdungeon dungeon){
-        List<Subdungeon> leafs = dungeon.GetLeafs();
-        float chance = 0;
-        float chanceinc = 100/(float)leafs.Count - roomnos;
-
-        foreach(Subdungeon leaf in leafs){
-            if(roomnos <= 0){
-                break;
+    public void distribbuffinut(buffs minbuff, buffs maxbuff, Subdungeon dungeon, int rooms){
+        float ccperroom = (maxbuff.cc - minbuff.cc)/rooms;
+        float cdperroom = (maxbuff.cd - minbuff.cd)/rooms;
+        float frperroom = (maxbuff.fr - minbuff.fr)/rooms;
+        float dmgperroom = (maxbuff.dmg - minbuff.dmg)/rooms;
+        float hpperroom = (maxbuff.hp - minbuff.hp)/rooms;
+        distribbuff(minbuff, ccperroom,cdperroom,frperroom,dmgperroom,hpperroom,dungeon);
+    }
+    public void distribbuff(buffs nextbuff ,float ccperroom, float cdperroom, float frperroom, float dmgperroom, float hpperroom, Subdungeon room){
+        if(room.AmILeaf()){
+            room.roombuffs = nextbuff;
+            nextbuff = new buffs(nextbuff.dmg+dmgperroom, nextbuff.fr+frperroom, nextbuff.cc + ccperroom, nextbuff.cc+cdperroom, nextbuff.hp + hpperroom);
+        }
+        else{
+            if(room.right != null){
+                distribbuff(nextbuff, ccperroom, cdperroom,frperroom, dmgperroom, hpperroom, room.right);
             }
-            int per = Random.Range(0,100);
-            if(per <= chance){
-                leaf.Bossroom = true;
-                roomnos += -1;
+            if(room.left != null){
+                distribbuff(nextbuff, ccperroom, cdperroom,frperroom, dmgperroom, hpperroom, room.right);
             }
-            chance +=  chanceinc;
         }
     }
     public void DrawRooms(Subdungeon dungeon) {
@@ -473,7 +492,7 @@ public class MyOwnBoard : MonoBehaviour
         subDungeon.corridorobjects.Add(obj);
         }
     }
-    public void MakeDungeon(int Bossrooms, int spaceX, int spaceY, int MinRoomSize, int nodes)
+    public void MakeDungeon(int Bossrooms, int spaceX, int spaceY, int MinRoomSize, int nodes, int difficulty)
     {
 
         MinRoomSiz = MinRoomSize;
@@ -481,10 +500,19 @@ public class MyOwnBoard : MonoBehaviour
         Subdungeon.root = dungeon;
         CreateBSP(dungeon, nodes);
         dungeon.CreateRoom(MinRoomSiz);
-        MakeRandBoss(Bossrooms,dungeon);
         dungeon.GetLeft().startroom = true;
         CreateCorr(dungeon);
         CreateObstacle(dungeon);
+
+        if(difficulty == 1){
+            distribbuffinut(new buffs(3, .01f, 3, .01f, 2), new buffs(8, .07f, 6, .05f, 10), dungeon, nodes);
+        }
+        if(difficulty == 2){
+            distribbuffinut(new buffs(10, .03f, 8, .05f, 10), new buffs(20, .1f, 16, .1f, 20), dungeon, nodes);
+        }
+        if(difficulty == 1){
+            distribbuffinut(new buffs(25, .1f, 20, .15f, 2), new buffs(50, .3f, 30, 1, 10), dungeon, nodes);
+        }
 
         
         GameData currentdata = new GameData(dungeon, livegamedata.currentdata);

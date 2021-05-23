@@ -8,6 +8,7 @@ using System.IO;
 
 [System.Serializable]
 public class SaveDataDungeon{
+    public buffs buffs;
     public SaveDataDungeon left;
     public SaveDataDungeon right;
     public bool startroom;
@@ -26,6 +27,7 @@ public class SaveDataDungeon{
         if(dungeon == null){
             return;
         }
+        buffs =  dungeon.roombuffs;
         roomspace[0] = dungeon.roomspace.x;
         roomspace[1] = dungeon.roomspace.y;
         roomspace[2] = dungeon.roomspace.width;
@@ -79,17 +81,17 @@ public class SaveDataDungeon{
 
 [System.Serializable]
 public class SaveDataPlayerData{
-    public int health;
     public float volume;
     public int shards;
     public int coins;
+    public int xp;
     public List<gun> owned = new List<gun>();
     public List<gun> equipped = new List<gun>();
     public SaveDataPlayerData(PlayerData data){
         this.coins = data.coins;
         this.shards = data.shards;
-        this.health = data.health;
         this.volume = data.volume;
+        this.xp = data.xp;
         foreach(GunInfo gun in data.owned){
             owned.Add(new gun(gun.chancetoupgrade, gun.name, gun.upgraded));
         }
@@ -153,8 +155,24 @@ public class PlayerData{
     public int coins;
     public int shards;
     public static List<string> startingguns = new List<string>() {"pistol", "doublepistol"};
-    public int health;
+    public int health{
+        get{ return 300 + (((int)this.level/1000) * 15) ;}
+        set { return; }
+    }
+    public float damagemultiplier{
+        get{ return 1f + ((this.level/1000f) * .1f) ;}
+        set { return; }
+    }
+    public float healthregenrate{
+        get{ return 30f + ((this.level/1000f) * 5f) ;}
+        set { return; }
+    }
+    public float level{
+        get{ return Mathf.Floor(xp/1000);}
+        set{return;}
+    }
     public float volume;
+    public int xp = 0;
 
     public void createdefaultsetting(){
         volume = 1;

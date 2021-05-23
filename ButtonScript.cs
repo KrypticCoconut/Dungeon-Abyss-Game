@@ -14,7 +14,6 @@
     public bool clone = false;
     public GameObject innerframe;
     public TextMeshProUGUI title;
-    public TextMeshProUGUI Warning;
     public TextMeshProUGUI difficulty;
     public bool accessable = false;
     public Image panel;
@@ -77,14 +76,6 @@
     void SwitchToTrue(){
         animator.SetBool("selected", true);
         title.text =  "Room " + dungeon.DebugID;
-        if(dungeon.Bossroom){
-            Warning.text = "Warning: BossRoom";
-            Warning.color = Color.red;
-        }
-        else{
-            Warning.text = "Warning: None";
-            Warning.color = Color.gray;
-        }
         if(dungeon.completed){
             Note.SetActive(true);
             Color color =  innerframe.GetComponent<Image>().color;

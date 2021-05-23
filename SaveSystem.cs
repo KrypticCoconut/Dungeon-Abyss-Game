@@ -88,9 +88,10 @@ public static class SaveSystem{
     public static PlayerData ConvPlayerData(SaveDataPlayerData data){
         PlayerData playerdata = new PlayerData();
         playerdata.volume = data.volume;
-        playerdata.health = data.health;
         playerdata.shards = data.shards;
         playerdata.coins = data.coins;
+        playerdata.xp = data.xp;
+        
         GunInfo temp;
         foreach(gun gun in data.owned){
             GunInfo.Guns.TryGetValue(gun.name, out temp);
@@ -110,6 +111,7 @@ public static class SaveSystem{
         if(data == null){
             return null;
         }
+
         Rect roomz = new Rect(data.room[0], data.room[1], data.room[2], data.room[3]);
         Rect spawnareaz = new Rect(data.spawnarea[0], data.spawnarea[1], data.spawnarea[2], data.spawnarea[3]);
         Rect roomspacez = new Rect(data.roomspace[0], data.roomspace[1], data.roomspace[2], data.roomspace[3]);
@@ -125,6 +127,7 @@ public static class SaveSystem{
             walls.Add(new Rect(wall[0], wall[1], wall[2], wall[3]));
         }
         Subdungeon dungeon = new Subdungeon(roomspacez, data.pattern);
+        dungeon.roombuffs = data.buffs;
         dungeon.room = roomz;
         dungeon.spawnarea = spawnareaz;
         dungeon.startroom = data.startroom;

@@ -49,7 +49,7 @@ public class SmallD : MonoBehaviour
         }
         if(runfunc){
             loadobj.GetComponent<loadscene>().startanim();
-            gameObject.transform.parent.GetComponentInParent<MyOwnBoard>().MakeDungeon(0,200,200,16,8);
+            gameObject.transform.parent.GetComponentInParent<MyOwnBoard>().MakeDungeon(0,200,200,16,8,1);
             loadobj.GetComponent<loadscene>().stopanim();
             runfunc = false;
         }

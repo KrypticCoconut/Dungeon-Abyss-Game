@@ -28,6 +28,7 @@ public class gunselect : MonoBehaviour
     public TextMeshProUGUI stitle;
     public TextMeshProUGUI sdesc;
     public Sprite questionmarks;
+    public GameObject player;
     // Start is called before the first frame update
     void Start()
     {
@@ -84,6 +85,7 @@ public class gunselect : MonoBehaviour
         Invoke("stopclick", animator.GetCurrentAnimatorStateInfo(0).speed * animator.GetCurrentAnimatorStateInfo(0).length);
     }
     public void stopclick(){
+        player.GetComponent<playerstats>().switchtoguns();
         if(livegamedata.paused){
             return;
         }
