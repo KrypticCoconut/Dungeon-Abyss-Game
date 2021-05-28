@@ -34,6 +34,7 @@ public class levelstarter : MonoBehaviour
         spawnobstacles(level.walls);
         GameObject.Find("Player").GetComponent<SpriteRenderer>().sortingOrder = 500;    
         GameObject.Find("Player").transform.position = levelspace.center;
+        // StartCoroutine(GetComponent<completionchecker>().checker )
     }
 
     void DrawSingleRoom(Rect room){
@@ -81,4 +82,7 @@ public class levelstarter : MonoBehaviour
             }
         }
     }
+    // List<GameObject> spawnenemies(Dictionary<Vector2, enemyclass> enemies){
+        
+    // }
 }

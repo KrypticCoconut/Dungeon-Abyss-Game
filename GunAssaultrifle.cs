@@ -76,16 +76,10 @@ public class GunAssaultrifle : MonoBehaviour
             {
                 damage = ((EquippedGun.Damage + (stacks * damageperstack)) *2);
             }
-            if(thePlayer.GetComponent<playereffects>().hp+5 > thePlayer.GetComponent<playereffects>().maxhp){
-                thePlayer.GetComponent<playereffects>().hp += 5;
+            if(thePlayer.GetComponent<mobeffects>().hp+5 > thePlayer.GetComponent<mobeffects>().maxhp){
+                thePlayer.GetComponent<mobeffects>().hp += 5;
             }
-            
-            enemy.GetComponent<playereffects>().hp -= damage;
-            enemy.GetComponent<playereffects>().sethp();
-            if(enemy.GetComponent<playereffects>().hp <= 0 ){
-                Instantiate(EquippedGun.HitEffect, enemy.transform.position, enemy.transform.rotation);
-                Destroy(enemy.gameObject);
-            }
+            enemy.GetComponent<mobeffects>().sethp((int)(enemy.GetComponent<mobeffects>().hp - damage), null, EquippedGun.HitEffect);
         }
         if (enemy.tag != "Player")
         {

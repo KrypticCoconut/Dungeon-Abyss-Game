@@ -121,17 +121,23 @@ public static class SaveSystem{
         foreach(float[] corridoor in data.corridoors){
             corridors.Add(new Rect(corridoor[0], corridoor[1], corridoor[2], corridoor[3]));
         }
-
+        Dictionary<Vector2, enemyclass> spawns = new Dictionary<Vector2, enemyclass>();
+        foreach(enemysave enemyspawn in data.enemyspawns){
+            enemyclass temp;
+            enemyclass.allenemies.TryGetValue(enemyspawn.name, out temp);
+            spawns.Add( new Vector2 (enemyspawn.coord[0], enemyspawn.coord[1]), temp);
+        }
         List<Rect> walls = new List<Rect>(); 
         foreach(float[] wall in data.walls){
             walls.Add(new Rect(wall[0], wall[1], wall[2], wall[3]));
         }
         Subdungeon dungeon = new Subdungeon(roomspacez, data.pattern);
+        dungeon.depth = data.depth;
         dungeon.roombuffs = data.buffs;
         dungeon.room = roomz;
         dungeon.spawnarea = spawnareaz;
         dungeon.startroom = data.startroom;
-
+        dungeon.enemyspawns = spawns;
         dungeon.corridors = corridors;
         dungeon.walls = walls;
         dungeon.pattern = data.pattern;

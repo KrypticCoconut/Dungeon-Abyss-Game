@@ -72,14 +72,7 @@ public class GunMachineGun : MonoBehaviour
                 {
                     damage = (EquippedGun.Damage);
                 }
-
-                
-                enemy.GetComponent<playereffects>().hp -= damage;
-                enemy.GetComponent<playereffects>().sethp();
-                if(enemy.GetComponent<playereffects>().hp <= 0 ){
-                    Instantiate(EquippedGun.HitEffect, enemy.transform.position, enemy.transform.rotation);
-                    Destroy(enemy.gameObject);
-                }
+                enemy.GetComponent<mobeffects>().sethp((int)(enemy.GetComponent<mobeffects>().hp - damage), null, EquippedGun.HitEffect);
                 break;
             }
             else{

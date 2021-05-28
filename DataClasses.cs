@@ -13,8 +13,10 @@ public class SaveDataDungeon{
     public SaveDataDungeon right;
     public bool startroom;
     public bool? splithor;
+    public int depth;
     public int DebugID;
     public bool completed;
+    public List<enemysave> enemyspawns = new List<enemysave>();
     public List<string> connections = new List<string>();
     public float[] roomspace = new float[4];
     public float[] room = new float[4];
@@ -37,6 +39,7 @@ public class SaveDataDungeon{
         spawnarea[1] = dungeon.spawnarea.y;
         spawnarea[2] = dungeon.spawnarea.width;
         spawnarea[3] = dungeon.spawnarea.height;
+        depth = dungeon.depth;
 
         splithor = dungeon.splithor;
 
@@ -57,6 +60,9 @@ public class SaveDataDungeon{
         foreach(Rect corridoor in dungeon.corridors){
             corridoors.Add(new float[] {corridoor.x,corridoor.y, corridoor.width,corridoor.height});
         }
+        foreach(KeyValuePair<Vector2, enemyclass> kvp in dungeon.enemyspawns){
+            enemyspawns.Add(new enemysave(kvp.Value.name, kvp.Key));
+        }
         foreach(Rect wall in dungeon.walls){
             walls.Add(new float[] {wall.x,wall.y, wall.width,wall.height});
         }
@@ -76,6 +82,15 @@ public class SaveDataDungeon{
     }
     public SaveDataDungeon(Subdungeon dungeon){
         MainStructure(dungeon);
+    }
+}
+[System.Serializable]
+public class enemysave{
+    public int[] coord;
+    public string name;
+    public enemysave(string name, Vector2 coord){
+        this.coord = new int[] {(int)coord.x, (int)coord.y};
+        this.name = name;
     }
 }
 

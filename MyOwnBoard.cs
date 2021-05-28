@@ -22,6 +22,7 @@ public class buffs{
 public class Subdungeon
 
 {
+    public int depth = 0;
     public List<Rect> walls = new List<Rect>();
     public GameObject roomobject;
     public bool? splithor;
@@ -31,6 +32,7 @@ public class Subdungeon
     public List<GameObject> corridorobjects = new List<GameObject>();
     public Rect roomspace;
     public Rect room;
+    public Dictionary<Vector2, enemyclass> enemyspawns = new Dictionary<Vector2, enemyclass>();
     public Rect spawnarea;
     public List<Rect> corridors = new List<Rect>();
     public buffs roombuffs;
@@ -412,16 +414,19 @@ public class MyOwnBoard : MonoBehaviour
 
             int wallrange = (int)Random.Range(3, 6);
 
-            List<Vector2> points = new List<Vector2>();
             if(splith){
                 int split = (int)Mathf.Floor(room.height/(wallrange*3));
                 foreach(int temp in Enumerable.Range(1,split)){
                     int end = temp * (wallrange*3);
                     int start = ((temp-1)* (wallrange*3)) + 1;
                     Rect range = new Rect(1+wallrange, start + wallrange, room.width-(wallrange*2),wallrange);
-                    Vector2 randompoint = new Vector3(Random.Range(range.x, range.xMax), Random.Range(range.y, range.yMax));
-                    points.Add(new Vector2(randompoint.x, randompoint.y));
-                    
+                    Vector2 randompoint = new Vector2(Random.Range(range.x, range.xMax), Random.Range(range.y, range.yMax));
+                    Vector2 enemyspawn = randomdir(randompoint, new Vector2(range.x, range.xMax), new Vector2(range.y, range.yMax), wallrange, dungeon);
+                    List<enemyclass> randl = enemyclass.getenemiesindepth(dungeon.depth);
+                    if(randl.Count !=0){
+                        enemyclass rand = randl[new System.Random().Next(randl.Count)];
+                        dungeon.enemyspawns.Add(enemyspawn, rand);     
+                    }                            
                 }
             }
             else{
@@ -432,30 +437,88 @@ public class MyOwnBoard : MonoBehaviour
 
                     Rect range = new Rect(start+wallrange, 1+wallrange + wallrange, wallrange,room.height-(wallrange*2));
                     Vector2 randompoint = new Vector3(Random.Range(range.x, range.xMax), Random.Range(range.y, range.yMax));
-                    points.Add(new Vector2(randompoint.x, randompoint.y));
-                    
+                    Vector2 enemyspawn = randomdir(randompoint, new Vector2(range.x, range.xMax), new Vector2(range.y, range.yMax), wallrange, dungeon);
+                    List<enemyclass> randl = enemyclass.getenemiesindepth(dungeon.depth);
+                    if(randl.Count !=0){
+                        enemyclass rand = randl[new System.Random().Next(randl.Count)];
+                        dungeon.enemyspawns.Add(enemyspawn, rand);     
+                    }     
                 }
             }
 
-            foreach(Vector2 point in points){
-                int direction = (int)Random.Range(1,5);
-                if(direction == 1){
-                    dungeon.walls.Add(new Rect (point.x, point.y, 0, wallrange));
-                }
-                if(direction == 2){
-                    dungeon.walls.Add(new Rect (point.x, (point.y - wallrange) +1, 0, wallrange));
-                }
-                if(direction == 3){
-                    dungeon.walls.Add(new Rect (point.x, point.y, wallrange, 0));
-                }
-                if(direction == 4){
-                    dungeon.walls.Add(new Rect ((point.x - wallrange) +1, point.y, wallrange, 0));
-                }
-            }
+            // foreach(Vector2 point in points){
+            //     int direction = (int)Random.Range(1,5);
+            //     if(direction == 1){
+            //         dungeon.walls.Add(new Rect (point.x, point.y, 0, wallrange));
+            //     }
+            //     if(direction == 2){
+            //         dungeon.walls.Add(new Rect (point.x, (point.y - wallrange) +1, 0, wallrange));
+            //     }
+            //     if(direction == 3){
+            //         dungeon.walls.Add(new Rect (point.x, point.y, wallrange, 0));
+            //     }
+            //     if(direction == 4){
+            //         dungeon.walls.Add(new Rect ((point.x - wallrange) +1, point.y, wallrange, 0));
+            //     }
+            // }
         }
         else{
             CreateObstacle(dungeon.left);
             CreateObstacle(dungeon.right);
+            
+        }
+    }
+    public void definedepthinit(){
+        List<Subdungeon> leafs = Subdungeon.root.GetLeafs();
+        Subdungeon startroom = null;
+        foreach(Subdungeon leaf in leafs){
+            if(leaf.startroom){
+                startroom = leaf;
+                break;
+            }
+        }
+        definedepthmain(startroom, 1);
+
+    }
+    public void definedepthmain(Subdungeon dung, int currentdepth){
+        dung.depth = currentdepth;
+        int nextdepth = currentdepth +1;
+        foreach(Subdungeon conn in dung.connections.Select(x => Subdungeon.GetConn(x))){
+            if(conn.depth == 0){
+                print(nextdepth + ": " + conn.pattern);
+                definedepthmain(conn, nextdepth);
+            }
+        }
+    }
+    public Vector2 randomdir(Vector2 point, Vector2 xmax, Vector2 ymax, int wallrange, Subdungeon dungeon){
+        int direction = (int)Random.Range(1,5);
+        float[] val1 = {0,0,0,0};
+        float[] val2 = {0,0,0,0};
+        if(direction == 1){
+            val1 = new float[] {xmax.x, ymax.x, (point.x-1), ymax.y};
+            val2 = new float[] {point.x+1, ymax.x, xmax.y, ymax.y};      
+            dungeon.walls.Add(new Rect (point.x, point.y, 0, wallrange));      
+        }
+        if(direction == 2){
+            val1 = new float[] {xmax.x, ymax.x, (point.x-1), ymax.y};
+            val2 = new float[] {point.x+1, ymax.x, xmax.y, ymax.y};     
+            dungeon.walls.Add(new Rect (point.x, (point.y - wallrange) +1, 0, wallrange));
+        }
+        if(direction == 3){
+            val1 = new float[] {point.x+1, ymax.x, xmax.y, ymax.y};
+            val2 = new float[] {xmax.x, ymax.x, xmax.y, point.y-1};      
+            dungeon.walls.Add(new Rect (point.x, point.y, wallrange, 0));
+        }
+        if(direction == 4){ //dir == 4
+            val1 = new float[] {point.x+1, ymax.x, xmax.y, ymax.y};
+            val2 = new float[] {xmax.x, ymax.x, xmax.y, point.y-1};     
+            dungeon.walls.Add(new Rect ((point.x - wallrange) +1, point.y, wallrange, 0));
+        }
+        if(Random.Range(1,3) > 1){
+            return new Vector2(Random.Range((int)val2[0], (int)val2[2]), Random.Range((int)val2[1], (int)val2[3]));
+        }
+        else{
+            return new Vector2(Random.Range((int)val1[0], (int)val1[2]), Random.Range((int)val1[1], (int)val1[3]));;
         }
     }
 
@@ -502,6 +565,7 @@ public class MyOwnBoard : MonoBehaviour
         dungeon.CreateRoom(MinRoomSiz);
         dungeon.GetLeft().startroom = true;
         CreateCorr(dungeon);
+        definedepthinit();
         CreateObstacle(dungeon);
 
         if(difficulty == 1){
